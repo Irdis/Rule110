@@ -56,6 +56,11 @@ class Program
         }
     }
 
+    public void FlipState(int pos)
+    {
+        _tape[pos] = 1 - _tape[pos];
+    }
+
     public void SetState(int pos, int val)
     {
         _tape[pos] = val;
@@ -147,6 +152,9 @@ class Program
         /*for (int i = 0; i < p.Size; i++)*/
         /*    p.SetState(i, rand.Next(0, 2) == 0 ? 1 : 0);*/
         p.FillWithEther();
+        p.FlipState(p.Size / 2 + 0);
+        p.FlipState(p.Size / 2 + 1);
+        p.FlipState(p.Size / 2 - 1);
         p.Draw();
         for (int i = 0; i < p.Size; i++)
         {
