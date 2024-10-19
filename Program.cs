@@ -5,6 +5,12 @@ namespace Rule110;
 public interface IGlider
 {
     int[] Pattern { get; }
+
+    // From what position start an ether tile after inserting pattern
+    // * * * *  <- Pattern -> ?
+    // * o o o 
+    // * o o * 
+    // * o * * 
     int Shift { get; }
 }
 public class ANGlider : IGlider
@@ -21,6 +27,7 @@ public class ANGlider : IGlider
             return;
         }
         var m = n - 2;
+        // _pattern repeats in following manner
         // 2 4 4 6 8 8 10 12 12
         var len = 2 * (2 * (m / 3) + (m % 3 == 0 ? 0 : 1) + 1);
         Console.WriteLine(n + " -> " + len);
