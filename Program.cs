@@ -30,7 +30,6 @@ public class ANGlider : IGlider
         // _pattern repeats in following manner
         // 2 4 4 6 8 8 10 12 12
         var len = 2 * (2 * (m / 3) + (m % 3 == 0 ? 0 : 1) + 1);
-        Console.WriteLine(n + " -> " + len);
         this.Shift = _shifts[m % 3];
 
         this.Pattern = new int[len];
@@ -40,6 +39,14 @@ public class ANGlider : IGlider
         }
     }
 }
+
+public class BGlider : IGlider
+{
+    private static int[] _pattern = new [] { 1, 0 };
+    public int Shift { get; } = 12;
+    public int[] Pattern { get; } = _pattern;
+}
+
 public class Scene
 {
     private int[] _table = Construct();
@@ -92,25 +99,48 @@ public class Scene
         return border;
     }
 
-    public void FillWithEther(int pos, IGlider glider)
+    public void FillWithEther(List<(int, IGlider)> gliders)
     {
         _useEther = true;
+        var etherCounter = 0;
         var ind = 0;
+        var gliderDrawn = false;
+
+        var gliderIndex = -1;
+        var curGliderPos = -1;
+        var curGlider = (IGlider)null;
+        if (gliders.Count > 0)
+        {
+            gliderIndex = 0;
+            (curGliderPos, curGlider) = gliders[0];
+        }
+
         while (ind < _size)
         {
-            var offset = pos * ETHER_PERIOD_X + 4;
-            if (offset == ind) {
-                for (int i = 0; i < glider.Pattern.Length; i++)
+            if (etherCounter == curGliderPos && 
+                    _etherPointer == 4 && 
+                    !gliderDrawn) {
+                for (int i = 0; i < curGlider.Pattern.Length; i++)
                 {
-                    _tape[ind] = glider.Pattern[i];
+                    _tape[ind] = curGlider.Pattern[i];
                     ind++;
                 }
-                _etherPointer = glider.Shift;
+                _etherPointer = curGlider.Shift;
+                gliderDrawn = true;
+                gliderIndex++;
+                (curGliderPos, curGlider) = gliderIndex < gliders.Count 
+                    ? gliders[gliderIndex]
+                    : (-1, null);
             } else {
                 _tape[ind] = _etherTile[_etherPointer];
                 ind++;
                 _etherPointer++;
                 _etherPointer %= ETHER_PERIOD_X;
+                if (_etherPointer == 0)
+                {
+                    etherCounter++;
+                    gliderDrawn = false;
+                }
             }
         }
     }
@@ -210,17 +240,20 @@ class Program
     static void Main(string[] args)
     {
         var rand = new Random();
-        for (int i = 1; i <= 15; i++)
+        var scene = new Scene(500);
+
+        var gliders = new List<(int, IGlider)>();
+        gliders.Add((1, new ANGlider(3)));
+        gliders.Add((15, new BGlider()));
+
+        scene.FillWithEther(gliders);
+        scene.Draw();
+
+        for (int j = 0; j < scene.Size; j++)
         {
-            var scene = new Scene(500, $"img{i}.bmp");
-            scene.FillWithEther(1, new ANGlider(i));
+            scene.Next();
             scene.Draw();
-            for (int j = 0; j < scene.Size; j++)
-            {
-                scene.Next();
-                scene.Draw();
-            }
-            scene.SaveImg();
         }
+        scene.SaveImg();
     }
 }
