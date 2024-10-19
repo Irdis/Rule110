@@ -2,14 +2,48 @@
 using System.Drawing.Imaging;
 
 namespace Rule110;
-
-class Program
+public interface IGlider
 {
+    int[] Pattern { get; }
+    int Shift { get; }
+}
+public class ANGlider : IGlider
+{
+    private static int[] _shifts = new []{ 8, 4, 12 };
+    private static int[] _pattern = new [] { 1, 0, 1, 1 };
+    public int Shift { get; set; }
+    public int[] Pattern { get; set; }
+    public ANGlider(int n)
+    {
+        if (n == 1)
+        {
+            this.Pattern = new[] { 1, 0 };
+            return;
+        }
+        var m = n - 2;
+        // 2 4 4 6 8 8 10 12 12
+        var len = 2 * (2 * (m / 3) + (m % 3 == 0 ? 0 : 1) + 1);
+        Console.WriteLine(n + " -> " + len);
+        this.Shift = _shifts[m % 3];
+
+        this.Pattern = new int[len];
+        for (int i = 0; i < len; i++)
+        {
+            this.Pattern[i] =  _pattern[i % 4];
+        }
+    }
+}
+public class Scene
+{
+    private int[] _table = Construct();
+
     private int _size;
     private int[] _tape;
     private int[] _tmp;
-    private int[] _table = Construct();
     private int _row = 0;
+    private int _totalShift = 0;
+    private int _etherPointer = 0;
+
     private Bitmap _img;
     public const int BLOCK_SIZE = 5;
 
@@ -22,18 +56,22 @@ class Program
         1, 0, 0, 1,
         1, 0 //, 1, 1 
     };
-
     private int[,] _etherBorder = ConstructEtherBorder();
-    
+
+    private string _filePath = "img.bmp";
+
     public int Size => _size;
     
 
-    public Program(int size)
+    public Scene(int size, string filePath = null)
     {
         _size = size;
         _tape = new int[_size];
         _tmp = new int[_size];
         _img = new Bitmap((_size + 1) * BLOCK_SIZE, (_size + 1) * BLOCK_SIZE);
+
+        if (filePath != null)
+            _filePath = filePath;
     }
 
     private static int[,] ConstructEtherBorder()
@@ -47,12 +85,26 @@ class Program
         return border;
     }
 
-    public void FillWithEther()
+    public void FillWithEther(int pos, IGlider glider)
     {
         _useEther = true;
-        for (int i = 0; i < _size; i++)
+        var ind = 0;
+        while (ind < _size)
         {
-            _tape[i] = _etherTile[i % ETHER_PERIOD_X];
+            var offset = pos * ETHER_PERIOD_X + 4;
+            if (offset == ind) {
+                for (int i = 0; i < glider.Pattern.Length; i++)
+                {
+                    _tape[ind] = glider.Pattern[i];
+                    ind++;
+                }
+                _etherPointer = glider.Shift;
+            } else {
+                _tape[ind] = _etherTile[_etherPointer];
+                ind++;
+                _etherPointer++;
+                _etherPointer %= ETHER_PERIOD_X;
+            }
         }
     }
 
@@ -97,9 +149,9 @@ class Program
                 _img.SetPixel(rect.X + i, rect.Y + j, col);
     }
 
-    public void SaveImg(string path)
+    public void SaveImg()
     {
-        _img.Save(path);
+        _img.Save(_filePath);
     }
 
     public void Print(int window)
@@ -129,7 +181,7 @@ class Program
     private int GetDefaultRight()
     {
         if (_useEther)
-            return _etherBorder[_size % ETHER_PERIOD_X, _row % ETHER_PERIOD_Y];
+            return _etherBorder[_etherPointer % ETHER_PERIOD_X, _row % ETHER_PERIOD_Y];
         return 0;
     }
 
@@ -144,23 +196,24 @@ class Program
         }
         return t;
     }
+}
 
+class Program
+{
     static void Main(string[] args)
     {
-        var p = new Program(500);
         var rand = new Random();
-        /*for (int i = 0; i < p.Size; i++)*/
-        /*    p.SetState(i, rand.Next(0, 2) == 0 ? 1 : 0);*/
-        p.FillWithEther();
-        p.FlipState(p.Size / 2 + 0);
-        p.FlipState(p.Size / 2 + 1);
-        p.FlipState(p.Size / 2 - 1);
-        p.Draw();
-        for (int i = 0; i < p.Size; i++)
+        for (int i = 1; i <= 15; i++)
         {
-            p.Next();
-            p.Draw();
+            var scene = new Scene(500, $"img{i}.bmp");
+            scene.FillWithEther(1, new ANGlider(i));
+            scene.Draw();
+            for (int j = 0; j < scene.Size; j++)
+            {
+                scene.Next();
+                scene.Draw();
+            }
+            scene.SaveImg();
         }
-        p.SaveImg("img.bmp");
     }
 }
