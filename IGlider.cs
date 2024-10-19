@@ -4,7 +4,7 @@ public interface IGlider
 {
     int[] Pattern { get; }
 
-    // From what position start an ether tile after inserting pattern
+    // Indicate position in the ether tile immediately after pattern ends
     // * * * *  <- Pattern -> ?
     // * o o o 
     // * o o * 
