@@ -1,6 +1,3 @@
-using System.Drawing;
-using System.Drawing.Imaging;
-
 namespace Rule110;
 
 public class Scene
@@ -11,12 +8,12 @@ public class Scene
     private int[] _tape;
     private int[] _tmp;
     private int _row = 0;
-    private int _etherPointer = 0;
 
-    private Bitmap _img;
+    private ImgBmp _img;
     public const int BLOCK_SIZE = 5;
 
     private bool _useEther;
+    private int _etherPointer = 0;
     private const int ETHER_PERIOD_X = 14;
     private const int ETHER_PERIOD_Y = 7;
     private static int[] _etherTile = new []{
@@ -27,20 +24,17 @@ public class Scene
     };
     private int[,] _etherBorder = ConstructEtherBorder();
 
-    private string _filePath = "img.bmp";
+    private static readonly string FILE_PATH = "img.bmp";
 
     public int Size => _size;
     
 
-    public Scene(int size, string filePath = null)
+    public Scene(int size, string? filePath = null)
     {
         _size = size;
         _tape = new int[_size];
         _tmp = new int[_size];
-        _img = new Bitmap((_size + 1) * BLOCK_SIZE, (_size + 1) * BLOCK_SIZE);
-
-        if (filePath != null)
-            _filePath = filePath;
+        _img = new ImgBmp(filePath ?? FILE_PATH, _size, _size, BLOCK_SIZE);
     }
 
     private static int[,] ConstructEtherBorder()
@@ -62,7 +56,7 @@ public class Scene
 
         var gliderIndex = -1;
         var curGliderPos = -1;
-        var curGlider = (IGlider)null;
+        var curGlider = (IGlider?)null;
         if (gliders.Count > 0)
         {
             gliderIndex = 0;
@@ -72,6 +66,9 @@ public class Scene
         while (ind < _size)
         {
             if (etherCounter == curGliderPos && _etherPointer == 4) {
+                if (curGlider == null)
+                    throw new InvalidOperationException("Glider cannot be null");
+
                 for (int i = 0; i < curGlider.Pattern.Length; i++)
                 {
                     _tape[ind] = curGlider.Pattern[i];
@@ -118,27 +115,12 @@ public class Scene
     
     public void Draw()
     {
-        for (int i = 0; i < _size; i++)
-        {
-            var rect = new Rectangle(
-                    i * BLOCK_SIZE, 
-                    _row * BLOCK_SIZE, 
-                    BLOCK_SIZE, 
-                    BLOCK_SIZE);
-            DrawRect(rect, _tape[i] == 1 ? Color.Black : Color.White);
-        }
-    }
-
-    public void DrawRect(Rectangle rect, Color col)
-    {
-        for (int i = 0; i < rect.Width; i++)
-            for (int j = 0; j < rect.Height; j++)
-                _img.SetPixel(rect.X + i, rect.Y + j, col);
+        _img.WriteRow(_tape);
     }
 
     public void SaveImg()
     {
-        _img.Save(_filePath);
+        _img.Save();
     }
 
     public void Print(int window)
