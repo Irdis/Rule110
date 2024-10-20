@@ -2,6 +2,9 @@ namespace Rule110;
 
 public class ImgBmp : IDisposable
 {
+    private static byte[] _white = new byte[] { 0xFF, 0xFF, 0xFF };
+    private static byte[] _black = new byte[] { 0x00, 0x00, 0x00 };
+
     private FileStream _writer;
     private BinaryWriter _binary;
 
@@ -12,7 +15,7 @@ public class ImgBmp : IDisposable
 
     public ImgBmp(string fileName, int width, int height, int pixelsPerBlock = 1)
     {
-        _writer = new FileStream("img.bmp", FileMode.OpenOrCreate);
+        _writer = new FileStream(fileName, FileMode.OpenOrCreate);
         _binary = new BinaryWriter(_writer);
         _pixelsPerBlock = pixelsPerBlock;
         WriteHeader(width * pixelsPerBlock, height * pixelsPerBlock);
@@ -36,14 +39,14 @@ public class ImgBmp : IDisposable
         _binary.Write(infoHeader);
         _binary.Write(width);
         _binary.Write(-height);
-        _binary.Write((short)1); //planes
-        _binary.Write((short)24); //bbp
+        _binary.Write((short)1); // planes
+        _binary.Write((short)24); // bbp
         _binary.Write(0); // comression
         _binary.Write(0); // img size
         _binary.Write(0); // xpixelsperm
         _binary.Write(0); // ypixelsperm
         _binary.Write(0); // colorsused
-        _binary.Write(0); //important colors
+        _binary.Write(0); // important colors
     }
 
     public void WriteRow(int[] pixels)
@@ -52,21 +55,10 @@ public class ImgBmp : IDisposable
         {
             for (int i = 0; i < pixels.Length; i++)
             {
-                if (pixels[i] == 0)
+                var color = pixels[i] == 0 ? _white : _black;
+                for (int k = 0; k < _pixelsPerBlock; k++)
                 {
-                    for (int k = 0; k < _pixelsPerBlock; k++)
-                    {
-                        _binary.Write((byte)0xFF);
-                        _binary.Write((byte)0xFF);
-                        _binary.Write((byte)0xFF);
-                    }
-                } else {
-                    for (int k = 0; k < _pixelsPerBlock; k++)
-                    {
-                        _binary.Write((byte)0x00);
-                        _binary.Write((byte)0x00);
-                        _binary.Write((byte)0x00);
-                    }
+                    _binary.Write(color);
                 }
             }
             for (int i = 0; i < _padding; i++)

@@ -10,7 +10,7 @@ public class Scene
     private int _row = 0;
 
     private ImgBmp _img;
-    public const int BLOCK_SIZE = 5;
+    public const int BLOCK_SIZE = 1;
 
     private bool _useEther;
     private int _etherPointer = 0;
@@ -27,7 +27,6 @@ public class Scene
     private static readonly string FILE_PATH = "img.bmp";
 
     public int Size => _size;
-    
 
     public Scene(int size, string? filePath = null)
     {
