@@ -11,7 +11,6 @@ public class Scene
     private int[] _tape;
     private int[] _tmp;
     private int _row = 0;
-    private int _totalShift = 0;
     private int _etherPointer = 0;
 
     private Bitmap _img;
@@ -60,7 +59,6 @@ public class Scene
         _useEther = true;
         var etherCounter = 0;
         var ind = 0;
-        var gliderDrawn = false;
 
         var gliderIndex = -1;
         var curGliderPos = -1;
@@ -73,16 +71,13 @@ public class Scene
 
         while (ind < _size)
         {
-            if (etherCounter == curGliderPos && 
-                    _etherPointer == 4 && 
-                    !gliderDrawn) {
+            if (etherCounter == curGliderPos && _etherPointer == 4) {
                 for (int i = 0; i < curGlider.Pattern.Length; i++)
                 {
                     _tape[ind] = curGlider.Pattern[i];
                     ind++;
                 }
                 _etherPointer = curGlider.Shift;
-                gliderDrawn = true;
                 gliderIndex++;
                 (curGliderPos, curGlider) = gliderIndex < gliders.Count 
                     ? gliders[gliderIndex]
@@ -95,7 +90,6 @@ public class Scene
                 if (_etherPointer == 0)
                 {
                     etherCounter++;
-                    gliderDrawn = false;
                 }
             }
         }
