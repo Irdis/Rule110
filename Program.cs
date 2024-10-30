@@ -11,7 +11,7 @@ class Program
 
             var gliders = new List<(int, IGlider)>();
             gliders.Add((4, new ANGlider(1)));
-            gliders.Add((20, new C3Glider(1)));
+            gliders.Add((20, new D2Glider(1)));
             gliders.Add((40, new BNConeHatGlider(i, 0)));
 
             scene.FillWithEther(gliders);
