@@ -10,8 +10,8 @@ class Program
             var scene = new Scene(1000, $"img{i}.bmp");
 
             var gliders = new List<(int, IGlider)>();
-            gliders.Add((4, new ANGlider(5)));
-            gliders.Add((40, new BHNGlider(i, 2)));
+            gliders.Add((4, new ANGlider(1)));
+            gliders.Add((40, new BNConeHatGlider(i, 0)));
 
             scene.FillWithEther(gliders);
             scene.Draw();

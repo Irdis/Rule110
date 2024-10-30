@@ -1,26 +1,7 @@
 namespace Rule110;
 
-public class BHNGlider : IGlider
+public abstract class BNHatGlider : IGlider
 {
-    public static TileSuffix BSuffix { get; } = TileUtils.ParseSuffix(new [] {
-        ("  * ", 0),
-        (" ***", 4),
-        ("**  ", 8),
-        (" * *", 12),
-        ("******", 4),
-        ("*     ", 8),
-        ("*    *", 12),
-        ("*   ", 0),
-        ("*  *", 4),
-        ("* **", 8),
-        ("*** ", 12),
-        ("* ", 0),
-        ("**", 4),
-        ("  ", 8),
-        ("* **   *** ", 12),
-        ("", 0),
-    });
-
     // 3 -> 15 -> 11 -> 7 -> 3
     // 10 -> 6 -> 2 -> 14 -> 10
     public static int[] ThinTiles = new[] { 1, 2, 3 };
@@ -32,9 +13,10 @@ public class BHNGlider : IGlider
 
     public int Shift { get; }
     public int[] Pattern { get; }
+    public abstract TileSuffix Suffix { get; }
 
 
-    public BHNGlider(int n, int opt)
+    public BNHatGlider(int n, int opt)
     {
         var tileCount = n + (n - 1) / 3 + 1 - ((n - 1) % 3 < ThinTiles[opt] ? 1 : 0);
 
@@ -44,7 +26,7 @@ public class BHNGlider : IGlider
 
         var lastRow = (row + tile.NextRow * (tileCount - 1)) % tile.YPeriod;
         var pref = BPrefix.Options[opt];
-        var suff = BSuffix.Options[lastRow];
+        var suff = this.Suffix.Options[lastRow];
         var pattern = new int[bodyWidth + pref.Length + suff.Length];
 
         var ind = 0;
@@ -64,7 +46,7 @@ public class BHNGlider : IGlider
             pattern[ind++] = bit;
         }
 
-        this.Shift = BSuffix.EtherEntrances[lastRow];
+        this.Shift = this.Suffix.EtherEntrances[lastRow];
         this.Pattern = pattern;
    }
 
