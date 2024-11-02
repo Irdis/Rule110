@@ -21,6 +21,34 @@ public class TileUtils
         "  * ** ",
     }, 12);
 
+    public static int BodyLength(int[][] strips, int n)
+    {
+        var count = strips.Length;
+        var total = TotalLength(strips);
+        var rem = FirstNLength(strips, n % count);
+        return n / count * total + rem;
+    }
+
+    public static int FirstNLength(int[][] strips, int n)
+    {
+        return strips.Take(n + 1).Sum(s => s.Length);
+    }
+
+    public static int TotalLength(int[][] strips)
+    {
+        return strips.Sum(s => s.Length);
+    }
+
+    public static int[][] ParseStrips(string[] strips)
+    {
+        var res = new int[strips.Length][];
+        for (int i = 0; i < strips.Length; i++)
+        {
+            res[i] = ParseStrip(strips[i]);
+        }
+        return res;
+    }
+
     public static int[] ParseStrip(string strip)
     {
         var res = new int[strip.Length];
