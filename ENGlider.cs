@@ -3,11 +3,11 @@ namespace Rule110;
 public class ENGlider : IGlider
 {
     public static int[][] EPrefix { get; } = [
-        TileUtils.ParseStrip("*        "),
+        TileUtils.ParseStrip("*........"),
     ];
 
     public static int[][][] EStrips { get; } = [
-        TileUtils.ParseStrips(["*  *", "* ", "* **"]),
+        TileUtils.ParseStrips(["*..*", "*.", "*.**"]),
     ];
     public static int[][] EEtherEntrances { get; } = [
         [ 4, 12, 8 ]

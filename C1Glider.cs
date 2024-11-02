@@ -3,8 +3,8 @@ namespace Rule110;
 public class C1Glider : IGlider
 {
     private static int[][] _prefix = [
-        TileUtils.ParseStrip("* *******"),
-        TileUtils.ParseStrip("*    "),
+        TileUtils.ParseStrip("*.*******"),
+        TileUtils.ParseStrip("*...."),
     ];
     private static int[] _etherEntrances = [4, 0];
     public int Shift { get; }

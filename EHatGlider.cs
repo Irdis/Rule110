@@ -2,14 +2,14 @@ namespace Rule110;
 public class EHatGlider : IGlider
 {
     private static int[][] _pattern = [
-        TileUtils.ParseStrip("*    *   ***** * "),
-        TileUtils.ParseStrip("* ****** ***** * "),
-        TileUtils.ParseStrip("*  ***** ***  ** "),
-        TileUtils.ParseStrip("*    * **  *  ** "),
-        TileUtils.ParseStrip("* *** * ***   ** "),
-        TileUtils.ParseStrip("* *  ** ****  ** "),
-        TileUtils.ParseStrip("* *  ****  *  ** "),
-        TileUtils.ParseStrip("*  ***     *  ** "),
+        TileUtils.ParseStrip("*....*...*****.*."),
+        TileUtils.ParseStrip("*.******.*****.*."),
+        TileUtils.ParseStrip("*..*****.***..**."),
+        TileUtils.ParseStrip("*....*.**..*..**."),
+        TileUtils.ParseStrip("*.***.*.***...**."),
+        TileUtils.ParseStrip("*.*..**.****..**."),
+        TileUtils.ParseStrip("*.*..****..*..**."),
+        TileUtils.ParseStrip("*..***.....*..**."),
     ];
     private static int[] _etherEntrances = [
         0, 0, 0, 0, 0, 0, 0, 0

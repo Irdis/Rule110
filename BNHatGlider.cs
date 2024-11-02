@@ -6,9 +6,9 @@ public abstract class BNHatGlider : IGlider
     // 10 -> 6 -> 2 -> 14 -> 10
     public static int[] ThinTiles = new[] { 1, 2, 3 };
     public static TilePrefix BPrefix { get; } = TileUtils.ParsePrefix(new [] {
-        ("*    ", 3),
-        ("* *****", 7),
-        ("*  **", 10),
+        ("*....", 3),
+        ("*.*****", 7),
+        ("*..**", 10),
     });
 
     public int Shift { get; }
