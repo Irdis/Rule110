@@ -2,7 +2,7 @@ namespace Rule110;
 
 public class TileUtils
 {
-    public static Tile B { get; } = ParseTile(new []{
+    public static Tile B { get; } = ParseTile([
         "*******",
         "*.....*",
         "*....**",
@@ -19,7 +19,7 @@ public class TileUtils
         "*.****.",
         "***..**",
         "..*.**.",
-    }, 12);
+    ], 12);
 
     public static int BodyLength(int[][] strips, int n)
     {

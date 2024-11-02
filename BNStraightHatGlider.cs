@@ -2,7 +2,7 @@ namespace Rule110;
 
 public class BNStraightHatGlider : BNHatGlider, IGlider
 {
-    public static TileSuffix BSuffix { get; } = TileUtils.ParseSuffix(new [] {
+    public static TileSuffix BSuffix { get; } = TileUtils.ParseSuffix([
         ("..*.", 0),
         (".***", 4),
         ("**..", 8),
@@ -19,7 +19,7 @@ public class BNStraightHatGlider : BNHatGlider, IGlider
         ("..", 8),
         ("*.**...***.", 12),
         ("", 0),
-    });
+    ]);
 
     public override TileSuffix Suffix => BSuffix;
 

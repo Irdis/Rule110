@@ -16,12 +16,12 @@ public class Scene
     private int _etherPointer = 0;
     private const int ETHER_PERIOD_X = 14;
     private const int ETHER_PERIOD_Y = 7;
-    private static int[] _etherTile = new []{
+    private static int[] _etherTile = [
         1, 1, 1, 1, 
         1, 0, 0, 0,
         1, 0, 0, 1,
         1, 0 //, 1, 1 
-    };
+    ];
     private int[,] _etherBorder = ConstructEtherBorder();
 
     private static readonly string FILE_PATH = "img.bmp";

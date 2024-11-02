@@ -6,8 +6,8 @@ public interface IGlider
 
     // Indicate position in the ether tile immediately after pattern ends
     // * * * *  <- Pattern -> ?
-    // * o o o 
-    // * o o * 
-    // * o * * 
+    // * . . . 
+    // * . . * 
+    // * . * * 
     int Shift { get; }
 }

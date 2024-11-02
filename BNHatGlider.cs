@@ -4,12 +4,12 @@ public abstract class BNHatGlider : IGlider
 {
     // 3 -> 15 -> 11 -> 7 -> 3
     // 10 -> 6 -> 2 -> 14 -> 10
-    public static int[] ThinTiles = new[] { 1, 2, 3 };
-    public static TilePrefix BPrefix { get; } = TileUtils.ParsePrefix(new [] {
+    public static int[] ThinTiles = [ 1, 2, 3 ];
+    public static TilePrefix BPrefix { get; } = TileUtils.ParsePrefix([
         ("*....", 3),
         ("*.*****", 7),
         ("*..**", 10),
-    });
+    ]);
 
     public int Shift { get; }
     public int[] Pattern { get; }
