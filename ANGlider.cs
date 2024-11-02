@@ -3,7 +3,7 @@ namespace Rule110;
 public class ANGlider : IGlider
 {
     private static int[] _shifts = new []{ 8, 4, 12 };
-    private static int[] _pattern = new [] { 1, 0, 1, 1 };
+    private static int[] _pattern = TileUtils.ParseStrip("* **");
     public int Shift { get; set; }
     public int[] Pattern { get; set; }
     public ANGlider(int n)

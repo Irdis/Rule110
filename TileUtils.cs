@@ -21,6 +21,16 @@ public class TileUtils
         "  * ** ",
     }, 12);
 
+    public static int[] ParseStrip(string strip)
+    {
+        var res = new int[strip.Length];
+        for (int i = 0; i < strip.Length; i++)
+        {
+            res[i] = strip[i] == '*' ? 1 : 0;
+        }
+        return res;
+    }
+
     public static Tile ParseTile(string[] stars, int nextRow)
     {
         var len = stars.Length;

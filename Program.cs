@@ -5,24 +5,27 @@ class Program
     static void Main(string[] args)
     {
         var rand = new Random();
-        for (int i = 1; i <= 20; i++)
+        for (int i = 1; i <= 5; i++)
         {
-            var scene = new Scene(1000, $"img{i}.bmp");
-
-            var gliders = new List<(int, IGlider)>();
-            gliders.Add((4, new ANGlider(1)));
-            gliders.Add((20, new D2Glider(1)));
-            gliders.Add((40, new BNConeHatGlider(i, 0)));
-
-            scene.FillWithEther(gliders);
-            scene.Draw();
-
-            for (int j = 0; j < scene.Size; j++)
+            for (int k = 0; k < 8; k++)
             {
-                scene.Next();
+                var scene = new Scene(1000, $"img{i}_{k+1}.bmp");
+
+                var gliders = new List<(int, IGlider)>();
+                gliders.Add((4, new ANGlider(1)));
+                gliders.Add((20, new EHatGlider(k)));
+                gliders.Add((40, new BNConeHatGlider(i, 0)));
+
+                scene.FillWithEther(gliders);
                 scene.Draw();
+
+                for (int j = 0; j < scene.Size; j++)
+                {
+                    scene.Next();
+                    scene.Draw();
+                }
+                scene.SaveImg();
             }
-            scene.SaveImg();
         }
     }
 }
