@@ -2,38 +2,32 @@ namespace Rule110;
 
 public class ENGlider : IGlider
 {
-    public static int[][] EPrefix { get; } = [
-        TileUtils.ParseStrip("*........"),
-    ];
-
-    public static int[][][] EStrips { get; } = [
-        TileUtils.ParseStrips(["*..*", "*.", "*.**"]),
-    ];
-    public static int[][] EEtherEntrances { get; } = [
-        [ 4, 12, 8 ]
-    ];
-
-    public int Shift { get; }
-    public int[] Pattern { get; }
+    public int Shift { get; set; }
+    public int[] Pattern { get;  set; }
 
     public ENGlider(int n, int opt) 
     {
-        var pref = EPrefix[opt];
+        var pref = EStrip.Prefix[opt];
         var prefLen = pref.Length;
 
-        var strips = EStrips[opt];
-        var bodyLen = n == 0 ? 0 : TileUtils.BodyLength(strips, n - 1);
+        var strips = EStrip.Body[opt];
+        var lastTileIndex = n + EStrip.FirstStripOffset[opt];
+        var bodyLen = lastTileIndex < 0 ? 0 : TileUtils.BodyLength(strips, lastTileIndex);
 
-        var etherEntrances = EEtherEntrances[opt];
+        var suffixIndex = lastTileIndex < 0 ? strips.Length - 1 : lastTileIndex % strips.Length;
+        var suff = EStrip.Suffix[opt];
+        var suffArr = suff.Options[suffixIndex];
+        var suffLen = suffArr.Length;
+        var etherEntrance = suff.EtherEntrances[suffixIndex];
 
-        var pattern = new int[prefLen + bodyLen];
+        var pattern = new int[prefLen + bodyLen + suffLen];
 
         var ind = 0;
         for (int i = 0; i < prefLen; i++)
         {
             pattern[ind++] = pref[i];
         }
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i <= lastTileIndex; i++)
         {
             var strip = strips[i % strips.Length];
             for (int j = 0; j < strip.Length; j++)
@@ -41,10 +35,12 @@ public class ENGlider : IGlider
                 pattern[ind++] = strip[j];
             }
         }
+        for (int i = 0; i < suffLen; i++)
+        {
+            pattern[ind++] = suffArr[i];
+        }
 
         this.Pattern = pattern;
-        this.Shift = n == 0 
-            ? etherEntrances[^1] 
-            : etherEntrances[(n - 1) % strips.Length];
+        this.Shift = etherEntrance;
     }
 }
