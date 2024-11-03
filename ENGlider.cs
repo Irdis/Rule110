@@ -2,20 +2,61 @@ namespace Rule110;
 
 public class ENGlider : IGlider
 {
+    public static int[][] Prefix { get; } = TileUtils.ParseStrips([
+        "*........",
+        "*.*....**",
+        "*.*",
+        "*.***",
+    ]);
+
+    public static int[][][] Body { get; } = [
+        TileUtils.ParseStrips(["*..*", "*.", "*.**"]),
+        TileUtils.ParseStrips(["*..*", "*...", "**"]),
+        TileUtils.ParseStrips(["*.....", "", "****"]),
+        TileUtils.ParseStrips(["*.", "******", "*."]),
+    ];
+
+    public static int[] FirstStripOffset { get; } = [
+        -1, -1, 0, 0
+    ];
+
+    public static TileSuffix[] Suffix { get; set; } = [
+        TileUtils.ParseSuffix([
+                ("", 4),
+                ("", 12),
+                ("", 8),
+        ]),
+        TileUtils.ParseSuffix([
+                ("", 4),
+                ("", 0),
+                ("", 8),
+        ]),
+        TileUtils.ParseSuffix([
+                ("", 8),
+                ("", 0),
+                ("*.", 12),
+        ]),
+        TileUtils.ParseSuffix([
+                ("**", 8),
+                ("", 4),
+                ("", 12),
+        ])
+    ];
+
     public int Shift { get; set; }
     public int[] Pattern { get;  set; }
 
     public ENGlider(int n, int opt) 
     {
-        var pref = EStrip.Prefix[opt];
+        var pref = Prefix[opt];
         var prefLen = pref.Length;
 
-        var strips = EStrip.Body[opt];
-        var lastTileIndex = n + EStrip.FirstStripOffset[opt];
+        var strips = Body[opt];
+        var lastTileIndex = n + FirstStripOffset[opt];
         var bodyLen = lastTileIndex < 0 ? 0 : TileUtils.BodyLength(strips, lastTileIndex);
 
         var suffixIndex = lastTileIndex < 0 ? strips.Length - 1 : lastTileIndex % strips.Length;
-        var suff = EStrip.Suffix[opt];
+        var suff = Suffix[opt];
         var suffArr = suff.Options[suffixIndex];
         var suffLen = suffArr.Length;
         var etherEntrance = suff.EtherEntrances[suffixIndex];
