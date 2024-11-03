@@ -1,4 +1,5 @@
 namespace Rule110;
+
 public class EHatGlider : IGlider
 {
     private static int[][] _pattern = TileUtils.ParseStrips([
