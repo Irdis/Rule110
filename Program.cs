@@ -5,14 +5,13 @@ class Program
     static void Main(string[] args)
     {
         var rand = new Random();
-        for (int k = 0; k < 10; k++)
+        for (int k = 0; k < 40; k++)
         {
             var scene = new Scene(1000, $"img{k+1}.bmp");
 
             var gliders = new List<(int, IGlider)>();
             gliders.Add((4, new ANGlider(8)));
-            gliders.Add((20, new ENGlider(5, 0)));
-            gliders.Add((30, new FGlider(k)));
+            gliders.Add((30, new GNGlider(k)));
             gliders.Add((40, new BNConeHatGlider(10, 0)));
 
             scene.FillWithEther(gliders);
