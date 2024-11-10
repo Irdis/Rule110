@@ -2,92 +2,66 @@ namespace Rule110;
 
 public class Scene
 {
-    private int[] _table = Construct();
+    private static int[] _table = Construct();
 
     private int _size;
     private int[] _tape;
     private int[] _tmp;
     private int _row = 0;
 
-    private ImgBmp _img;
-    public const int BLOCK_SIZE = 1;
-
-    private bool _useEther;
-    private int _etherPointer = 0;
-    private const int ETHER_PERIOD_X = 14;
-    private const int ETHER_PERIOD_Y = 7;
-    private static int[] _etherTile = [
-        1, 1, 1, 1, 
-        1, 0, 0, 0,
-        1, 0, 0, 1,
-        1, 0 //, 1, 1 
-    ];
-    private int[,] _etherBorder = ConstructEtherBorder();
-
-    private static readonly string FILE_PATH = "img.bmp";
+    private IBackground _background;
+    private List<IObserver> _observers;
 
     public int Size => _size;
 
-    public Scene(int size, string? filePath = null)
+    public Scene(int size, IBackground background, List<IObserver> observers)
     {
         _size = size;
         _tape = new int[_size];
         _tmp = new int[_size];
-        _img = new ImgBmp(filePath ?? FILE_PATH, _size, _size, BLOCK_SIZE);
+        _background = background;
+        _observers = observers ?? new List<IObserver>(0);
     }
 
-    private static int[,] ConstructEtherBorder()
+    public void Init(List<(int, IGlider)> gliders)
     {
-        var border = new int[ETHER_PERIOD_X, ETHER_PERIOD_Y];
-        for (int j = 0; j < ETHER_PERIOD_Y; j++)
-        for (int i = 0; i < ETHER_PERIOD_X; i++)
-        {
-            border[i, j] = _etherTile[(i + j*4) % ETHER_PERIOD_X];
-        }
-        return border;
-    }
-
-    public void FillWithEther(List<(int, IGlider)> gliders)
-    {
-        _useEther = true;
-        var etherCounter = 0;
-        var ind = 0;
-
         var gliderIndex = -1;
-        var curGliderPos = -1;
-        var curGlider = (IGlider?)null;
+        var tileIndex = -1;
+        var glider = (IGlider?)null;
         if (gliders.Count > 0)
         {
             gliderIndex = 0;
-            (curGliderPos, curGlider) = gliders[0];
+            (tileIndex, glider) = gliders[0];
         }
 
+        var ind = 0;
         while (ind < _size)
         {
-            if (etherCounter == curGliderPos && _etherPointer == 4) {
-                if (curGlider == null)
-                    throw new InvalidOperationException("Glider cannot be null");
+            if (glider != null &&
+                _background.TileIndex == tileIndex && 
+                _background.Position == 4) {
 
-                for (int i = 0; i < curGlider.Pattern.Length; i++)
+                for (int i = 0; i < glider.Pattern.Length; i++)
                 {
-                    _tape[ind] = curGlider.Pattern[i];
-                    ind++;
+                    _tape[ind++] = glider.Pattern[i];
                 }
-                _etherPointer = curGlider.Shift;
+                _background.Shift(glider.Shift);
+
                 gliderIndex++;
-                (curGliderPos, curGlider) = gliderIndex < gliders.Count 
+                (tileIndex, glider) = gliderIndex < gliders.Count 
                     ? gliders[gliderIndex]
                     : (-1, null);
             } else {
-                _tape[ind] = _etherTile[_etherPointer];
-                ind++;
-                _etherPointer++;
-                _etherPointer %= ETHER_PERIOD_X;
-                if (_etherPointer == 0)
-                {
-                    etherCounter++;
-                }
+                _tape[ind++] = _background.Next(); 
             }
+        }
+    }
+
+    public void InitComplete()
+    {
+        foreach(var obs in _observers)
+        {
+            obs.Next(_row, _tape);
         }
     }
 
@@ -110,47 +84,26 @@ public class Scene
         }
         (_tape, _tmp) = (_tmp, _tape);
         _row++;
+        foreach (var obs in _observers)
+        {
+            obs.Next(_row, _tape);
+        }
     }
     
-    public void Draw()
+    public void Complete()
     {
-        _img.WriteRow(_tape);
-    }
-
-    public void SaveImg()
-    {
-        _img.Save();
-    }
-
-    public void Print(int window)
-    {
-        for (int i = _size - 1 - window; i < _size; i++)
+        foreach (var obs in _observers)
         {
-            Console.Write(_tape[i] == 1 ? '*' : ' ');
+            obs.Complete();
         }
-        Console.WriteLine();
     }
 
     public int GetState(int[] arr, int p) 
     {
-        var s1 = p > 0 ? arr[p-1] : GetDefaultLeft();
+        var s1 = p > 0 ? arr[p-1] : _background.GetLeft(_row);
         var s2 = arr[p];
-        var s3 = p < arr.Length - 1 ? arr[p+1] : GetDefaultRight();
+        var s3 = p < arr.Length - 1 ? arr[p+1] : _background.GetRight(_row);
         return (s1 << 2) + (s2 << 1) + s3;
-    }
-
-    private int GetDefaultLeft()
-    {
-        if (_useEther)
-            return _etherBorder[ETHER_PERIOD_X - 1, _row % ETHER_PERIOD_Y];
-        return 0;
-    }
-
-    private int GetDefaultRight()
-    {
-        if (_useEther)
-            return _etherBorder[_etherPointer % ETHER_PERIOD_X, _row % ETHER_PERIOD_Y];
-        return 0;
     }
 
     public static int[] Construct()
