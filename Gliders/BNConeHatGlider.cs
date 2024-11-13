@@ -23,7 +23,7 @@ public class BNConeHatGlider : BNHatGlider, IGlider
 
     public override TileSuffix Suffix => BSuffix;
 
-    public BNConeHatGlider(int n, int opt) 
-        : base(n, opt) {}
+    public BNConeHatGlider(int n) 
+        : base(n) {}
 }
 

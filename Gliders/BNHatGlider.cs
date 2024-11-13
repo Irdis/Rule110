@@ -23,29 +23,24 @@ public abstract class BNHatGlider : IGlider
 
     // 3 -> 15 -> 11 -> 7 -> 3
     // 10 -> 6 -> 2 -> 14 -> 10
-    public static int[] ThinTiles = [ 1, 2, 3 ];
-    public static TilePrefix BPrefix { get; } = TileUtils.ParsePrefix([
-        ("*....", 3),
-        ("*.*****", 7),
-        ("*..**", 10),
-    ]);
+    public static int ThinTile = 1;
+    public static TilePrefix BPrefix { get; } = TileUtils.ParsePrefix("*....", 3);
 
     public int EtherLeave { get; } = 4;
     public int EtherEnter { get; }
     public int[] Pattern { get; }
     public abstract TileSuffix Suffix { get; }
 
-
-    public BNHatGlider(int n, int opt)
+    public BNHatGlider(int n)
     {
-        var tileCount = n + (n - 1) / 3 + 1 - ((n - 1) % 3 < ThinTiles[opt] ? 1 : 0);
+        var tileCount = n + (n - 1) / 3 + 1 - ((n - 1) % 3 < ThinTile ? 1 : 0);
 
         var tile = B;
-        var row = BPrefix.TileEntrances[opt];
-        var bodyWidth = 7 * tileCount - (tileCount - 1) / 4 - ((tileCount - 1) % 4 >= ThinTiles[opt] ? 1 : 0);
+        var row = BPrefix.TileEntrance;
+        var bodyWidth = 7 * tileCount - (tileCount - 1) / 4 - ((tileCount - 1) % 4 >= ThinTile ? 1 : 0);
 
         var lastRow = (row + tile.NextRow * (tileCount - 1)) % tile.YPeriod;
-        var pref = BPrefix.Options[opt];
+        var pref = BPrefix.Arr;
         var suff = this.Suffix.Options[lastRow];
         var pattern = new int[bodyWidth + pref.Length + suff.Length];
 

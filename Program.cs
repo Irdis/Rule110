@@ -18,7 +18,8 @@ public class Program
 
             var gliders = new List<(int, IGlider)>();
             gliders.Add((4, new ANGlider(7)));
-            gliders.Add((20, new C1Glider(0)));
+            gliders.Add((15, new BNConeHatGlider(7)));
+            gliders.Add((20, new C1Glider()));
             gliders.Add((42, new GliderGun()));
 
             scene.Init(gliders);

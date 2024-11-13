@@ -65,27 +65,17 @@ public class TileUtils
         return tile;
     }
 
-    public static TilePrefix ParsePrefix((string, int)[] stars)
+    public static TilePrefix ParsePrefix(string str, int entrance)
     {
-        var len = stars.Length;
-
-        var entr = new int[len];
-        var opt = new List<int[]>();
-        for (int i = 0; i < len; i++)
+        var prefix = new int[str.Length];
+        for (int j = 0; j < str.Length; j++)
         {
-            var (str, entrance) = stars[i];
-            entr[i] = entrance;
-            var prefix = new int[str.Length];
-            for (int j = 0; j < str.Length; j++)
-            {
-                prefix[j] = str[j] == '*' ? 1 : 0;
-            }
-            opt.Add(prefix);
+            prefix[j] = str[j] == '*' ? 1 : 0;
         }
 
         var tilePrefix = new TilePrefix {
-            Options = opt,
-            TileEntrances = entr
+            Arr = prefix,
+            TileEntrance = entrance
         };
         return tilePrefix;
     }
