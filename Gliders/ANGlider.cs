@@ -1,10 +1,11 @@
-namespace Rule110;
+namespace Rule110.Gliders;
 
 public class ANGlider : IGlider
 {
-    private static int[] _shifts = [ 8, 4, 12 ];
+    private static int[] _etherEnters = [ 8, 4, 12 ];
     private static int[] _pattern = TileUtils.ParseStrip("*.**");
-    public int Shift { get; set; }
+    public int EtherEnter { get; set; }
+    public int EtherLeave { get; } = 4;
     public int[] Pattern { get; set; }
     public ANGlider(int n)
     {
@@ -17,7 +18,7 @@ public class ANGlider : IGlider
         // _pattern repeats in following manner
         // 2 4 4 6 8 8 10 12 12
         var len = 2 * (2 * (m / 3) + (m % 3 == 0 ? 0 : 1) + 1);
-        this.Shift = _shifts[m % 3];
+        this.EtherEnter = _etherEnters[m % 3];
 
         this.Pattern = new int[len];
         for (int i = 0; i < len; i++)

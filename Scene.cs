@@ -39,13 +39,13 @@ public class Scene
         {
             if (glider != null &&
                 _background.TileIndex == tileIndex && 
-                _background.Position == 4) {
+                _background.Position == glider.EtherLeave) {
 
                 for (int i = 0; i < glider.Pattern.Length; i++)
                 {
                     _tape[ind++] = glider.Pattern[i];
                 }
-                _background.Shift(glider.Shift);
+                _background.Shift(glider.EtherEnter);
 
                 gliderIndex++;
                 (tileIndex, glider) = gliderIndex < gliders.Count 

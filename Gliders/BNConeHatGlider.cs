@@ -1,4 +1,4 @@
-namespace Rule110;
+namespace Rule110.Gliders;
 
 public class BNConeHatGlider : BNHatGlider, IGlider
 {

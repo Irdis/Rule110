@@ -1,4 +1,4 @@
-namespace Rule110;
+namespace Rule110.Gliders;
 
 public class GNGlider : IGlider
 {
@@ -39,13 +39,14 @@ public class GNGlider : IGlider
     ]);
 
     public int[] Pattern { get;  set; }
-    public int Shift { get; set; }
+    public int EtherEnter { get; set; }
+    public int EtherLeave { get; } = 4;
 
     public GNGlider(int n)
     {
         if (n == 0)
         {
-            this.Shift = 0;
+            this.EtherEnter = 0;
             this.Pattern = Prefix;
             return;
         }
@@ -72,6 +73,6 @@ public class GNGlider : IGlider
             pattern[ind++] = suff[i];
 
         this.Pattern = pattern;
-        this.Shift = Suffix.EtherEntrances[n % Body.Length];
+        this.EtherEnter = Suffix.EtherEntrances[n % Body.Length];
     }
 }

@@ -1,4 +1,4 @@
-namespace Rule110;
+namespace Rule110.Gliders;
 
 public class FGlider : IGlider
 {
@@ -20,12 +20,13 @@ public class FGlider : IGlider
         0, 4
     ];
 
-    public int Shift { get; }
+    public int EtherEnter { get; }
+    public int EtherLeave { get; } = 4;
     public int[] Pattern { get; }
 
     public FGlider(int opt)
     {
-        this.Shift = _etherEntrances[opt];
+        this.EtherEnter = _etherEntrances[opt];
         this.Pattern = _pattern[opt];
     }
 }

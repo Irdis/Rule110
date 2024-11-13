@@ -1,4 +1,6 @@
-﻿namespace Rule110;
+﻿using Rule110.Gliders;
+
+namespace Rule110;
 
 public class Program
 {

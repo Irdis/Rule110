@@ -1,4 +1,4 @@
-namespace Rule110;
+namespace Rule110.Gliders;
 
 public class D2Glider : IGlider
 {
@@ -7,12 +7,13 @@ public class D2Glider : IGlider
         TileUtils.ParseStrip("*.***...."),
     ];
     private static int[] _etherEntrances = [8, 8];
-    public int Shift { get; }
+    public int EtherEnter { get; }
+    public int EtherLeave { get; } = 4;
     public int[] Pattern { get; }
 
     public D2Glider(int opt)
     {
-        this.Shift = _etherEntrances[opt];
+        this.EtherEnter = _etherEntrances[opt];
         this.Pattern = _prefix[opt];
     }
 }

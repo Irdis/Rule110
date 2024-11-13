@@ -1,4 +1,4 @@
-namespace Rule110;
+namespace Rule110.Gliders;
 
 public class ENGlider : IGlider
 {
@@ -43,7 +43,8 @@ public class ENGlider : IGlider
         ])
     ];
 
-    public int Shift { get; set; }
+    public int EtherEnter { get; set; }
+    public int EtherLeave { get; } = 4;
     public int[] Pattern { get;  set; }
 
     public ENGlider(int n, int opt) 
@@ -82,6 +83,6 @@ public class ENGlider : IGlider
         }
 
         this.Pattern = pattern;
-        this.Shift = etherEntrance;
+        this.EtherEnter = etherEntrance;
     }
 }

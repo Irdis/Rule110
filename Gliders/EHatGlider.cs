@@ -1,4 +1,4 @@
-namespace Rule110;
+namespace Rule110.Gliders;
 
 public class EHatGlider : IGlider
 {
@@ -16,12 +16,13 @@ public class EHatGlider : IGlider
         0, 0, 0, 0, 0, 0, 0, 0
     ];
 
-    public int Shift { get; }
+    public int EtherEnter { get; }
+    public int EtherLeave { get; } = 4;
     public int[] Pattern { get; }
 
     public EHatGlider(int opt)
     {
-        this.Shift = _etherEntrances[opt];
+        this.EtherEnter = _etherEntrances[opt];
         this.Pattern = _pattern[opt];
     }
 }

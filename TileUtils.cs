@@ -2,25 +2,6 @@ namespace Rule110;
 
 public class TileUtils
 {
-    public static Tile B { get; } = ParseTile([
-        "*******",
-        "*.....*",
-        "*....**",
-        "*...**.",
-        "*..***.",
-        "*.**.**",
-        "******.",
-        "*....**",
-        "*...**.",
-        "*..****",
-        "*.**...",
-        "****..*",
-        "*..*.**",
-        "*.****.",
-        "***..**",
-        "..*.**.",
-    ], 12);
-
     public static int BodyLength(int[][] strips, int n)
     {
         var count = strips.Length;
