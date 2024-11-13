@@ -22,7 +22,6 @@ public abstract class BNHatGlider : IGlider
     ], 12);
 
     // 3 -> 15 -> 11 -> 7 -> 3
-    // 10 -> 6 -> 2 -> 14 -> 10
     public static int ThinTile = 1;
     public static TilePrefix BPrefix { get; } = TileUtils.ParsePrefix("*....", 3);
 
