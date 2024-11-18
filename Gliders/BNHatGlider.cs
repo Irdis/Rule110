@@ -32,7 +32,7 @@ public abstract class BNHatGlider : IGlider
 
     public BNHatGlider(int n)
     {
-        var tileCount = n + (n - 1) / 3 + 1 - ((n - 1) % 3 < ThinTile ? 1 : 0);
+        var tileCount = n + 1 + n / 3 + (n % 3 < ThinTile ? 0 : 1);
 
         var tile = B;
         var row = BPrefix.TileEntrance;

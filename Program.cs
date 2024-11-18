@@ -17,10 +17,12 @@ public class Program
             var scene = new Scene(size, background, observers);
 
             var gliders = new List<(int, IGlider)>();
-            gliders.Add((4, new ANGlider(7)));
-            gliders.Add((15, new BNConeHatGlider(7)));
-            gliders.Add((20, new C1Glider()));
-            gliders.Add((42, new GliderGun()));
+            gliders.Add((4, new ANGlider(0)));
+            gliders.Add((15, new BNStraightHatGlider(0)));
+            gliders.Add((20, new BNStraightHatGlider(1)));
+            gliders.Add((40, new BNStraightHatGlider(2)));
+            gliders.Add((50, new BNStraightHatGlider(4)));
+            gliders.Add((55, new BNStraightHatGlider(5)));
 
             scene.Init(gliders);
 

@@ -9,13 +9,12 @@ public class ANGlider : IGlider
     public int[] Pattern { get; set; }
     public ANGlider(int n)
     {
-        if (n == 1)
+        if (n == 0)
         {
-            this.Pattern = new[] { 1, 0 };
+            this.Pattern = [ 1, 0 ];
             return;
         }
-        var m = n - 2;
-        // _pattern repeats in following manner
+        var m = n - 1;
         // 2 4 4 6 8 8 10 12 12
         var len = 2 * (2 * (m / 3) + (m % 3 == 0 ? 0 : 1) + 1);
         this.EtherEnter = _etherEnters[m % 3];
