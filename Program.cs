@@ -6,7 +6,11 @@ public class Program
 {
     public static void Gliders()
     {
-        for (int k = 0; k < 1; k++)
+        var gl = new EHatGlider();
+        var analyzer = new GliderAnalyzer();
+        var glLst = analyzer.Analyze(gl);
+
+        for (int k = 0; k < glLst.Count; k++)
         {
             const int size = 1000;
             var background = new EtherBackground();
@@ -14,15 +18,13 @@ public class Program
             {
                 new ImgObserver(size, $"img{k+1}.bmp"),
             };
+
             var scene = new Scene(size, background, observers);
 
             var gliders = new List<(int, IGlider)>();
             gliders.Add((4, new ANGlider(0)));
-            gliders.Add((15, new BNStraightHatGlider(0)));
-            gliders.Add((20, new BNStraightHatGlider(1)));
-            gliders.Add((40, new BNStraightHatGlider(2)));
-            gliders.Add((50, new BNStraightHatGlider(4)));
-            gliders.Add((55, new BNStraightHatGlider(5)));
+            gliders.Add((15, gl));
+            gliders.Add((20, glLst[k]));
 
             scene.Init(gliders);
 

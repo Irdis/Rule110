@@ -8,13 +8,15 @@ public class Scene
     private int[] _tape;
     private int[] _tmp;
     private int _row = 0;
+    private bool _initialized = false;
 
     private IBackground _background;
     private List<IObserver> _observers;
 
     public int Size => _size;
+    public int[] Tape => _tape;
 
-    public Scene(int size, IBackground background, List<IObserver> observers)
+    public Scene(int size, IBackground background, List<IObserver>? observers = null)
     {
         _size = size;
         _tape = new int[_size];
@@ -59,6 +61,7 @@ public class Scene
 
     public void InitComplete()
     {
+        _initialized = true;
         foreach(var obs in _observers)
         {
             obs.Next(_row, _tape);
@@ -77,9 +80,11 @@ public class Scene
 
     public void Next()
     {
+        if (!_initialized)
+            throw new InvalidOperationException($"Call `{nameof(InitComplete)}` before calculating next state");
         for (int i = 0; i < _size; i++)
         {
-            var state = GetState(_tape, i);
+            var state = ApplyRule(_tape, i);
             _tmp[i] = _table[state];
         }
         (_tape, _tmp) = (_tmp, _tape);
@@ -98,7 +103,7 @@ public class Scene
         }
     }
 
-    public int GetState(int[] arr, int p) 
+    private int ApplyRule(int[] arr, int p) 
     {
         var s1 = p > 0 ? arr[p-1] : _background.GetLeft(_row);
         var s2 = arr[p];

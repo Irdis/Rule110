@@ -5,5 +5,5 @@ public class EHatGlider : IGlider
     private static int[] _pattern = TileUtils.ParseStrip("*....*...*****.*.");
     public int EtherEnter { get; } = 0;
     public int EtherLeave { get; } = 4;
-    public int[] Pattern { get; }
+    public int[] Pattern { get; } = _pattern;
 }

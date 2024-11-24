@@ -2,9 +2,10 @@ namespace Rule110;
 
 public class EtherBackground : IBackground
 {
-    private const int ETHER_PERIOD_X = 14;
-    private const int ETHER_PERIOD_Y = 7;
-    private static int[] _etherTile = [
+    public const int PERIOD_X = 14;
+    public const int PERIOD_Y = 7;
+    public static int[] Periods { get; } = [ 0, 4, 8, 12 ];
+    public static int[] Tile { get; } = [
         1, 1, 1, 1, 
         1, 0, 0, 0,
         1, 0, 0, 1,
@@ -14,41 +15,41 @@ public class EtherBackground : IBackground
 
     private static int[,] ConstructEtherBorder()
     {
-        var border = new int[ETHER_PERIOD_X, ETHER_PERIOD_Y];
-        for (int j = 0; j < ETHER_PERIOD_Y; j++)
-        for (int i = 0; i < ETHER_PERIOD_X; i++)
+        var border = new int[PERIOD_X, PERIOD_Y];
+        for (int j = 0; j < PERIOD_Y; j++)
+        for (int i = 0; i < PERIOD_X; i++)
         {
-            border[i, j] = _etherTile[(i + j*4) % ETHER_PERIOD_X];
+            border[i, j] = Tile[(i + j*4) % PERIOD_X];
         }
         return border;
     }
 
     private int _pointer = 0; 
 
-    public int TileIndex => _pointer / ETHER_PERIOD_X;
-    public int Position => _pointer % ETHER_PERIOD_X;
+    public int TileIndex => _pointer / PERIOD_X;
+    public int Position => _pointer % PERIOD_X;
     
     public int Next() 
     {
-        var val = _etherTile[_pointer % ETHER_PERIOD_X];
+        var val = Tile[_pointer % PERIOD_X];
         _pointer++;
         return val;
     }
 
     public void Shift(int offset) 
     {
-        _pointer -= _pointer % ETHER_PERIOD_X;
+        _pointer -= _pointer % PERIOD_X;
         _pointer += offset;
     }
 
     public int GetLeft(int lvl)
     {
-        return _border[ETHER_PERIOD_X - 1, lvl % ETHER_PERIOD_Y];
+        return _border[PERIOD_X - 1, lvl % PERIOD_Y];
     }
 
     public int GetRight(int lvl)
     {
-        return _border[Position, lvl % ETHER_PERIOD_Y];
+        return _border[Position, lvl % PERIOD_Y];
     }
 }
 
