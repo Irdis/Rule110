@@ -19,7 +19,7 @@ public class GliderAnalyzer
         res.Add(initialGlider);
         while(true)
         {
-            width = Width(glider);
+            width = Width(currentGlider);
             background = new EtherBackground();
             miniScene = new Scene(width, background);
             miniScene.Init([(1, currentGlider)]);
@@ -120,19 +120,6 @@ public class GliderAnalyzer
                 return false;
         }
         position += (forward ? 1 : -1) * stripLength;
-        return true;
-    }
-
-    private bool TestTileBackward(ref int position, int tilePointer, int[] arr)
-    {
-        var p = position;
-        var stripLength = tilePointer == 12 ? 2 : 4;
-        for (int i = 0; i < stripLength; i++)
-        {
-            if (arr[p + i] != EtherBackground.Tile[tilePointer + i])
-                return false;
-        }
-        position += stripLength;
         return true;
     }
 
