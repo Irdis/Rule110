@@ -16,6 +16,7 @@ public class GliderAnalyzer
         var currentGlider = initialGlider;
 
         var res = new List<IGlider>();
+        res.Add(initialGlider);
         while(true)
         {
             width = Width(glider);
@@ -44,6 +45,24 @@ public class GliderAnalyzer
     
     private IGlider ExtractGlider(int start, int end, int[] tape)
     {
+        var (patternBegins, etherLeave) = TrimStart(tape, start);
+        var (patternEnds, etherEnter) = TrimEnd(tape, end);
+
+        var patternLen = patternEnds - patternBegins + 1;
+        var pattern = new int[patternLen];
+
+        Array.Copy(tape, patternBegins, pattern, 0, patternLen);
+
+        return new GenericGlider
+        {
+            EtherEnter = etherEnter,
+            EtherLeave = etherLeave,
+            Pattern = pattern
+        };
+    }
+
+    private (int, int) TrimStart(int[] tape, int start)
+    {
         var pointer = 0;
         var periods = EtherBackground.Periods;
 
@@ -61,9 +80,15 @@ public class GliderAnalyzer
             periodNumber %= 4;
         }
         var etherLeave = periods[periodNumber];
+        return (patternBegins, etherLeave);
+    }
 
-        pointer = tape.Length - 1;
-        periodNumber = Array.IndexOf(periods, end);
+    private (int, int) TrimEnd(int[] tape, int end)
+    {
+        var pointer = tape.Length - 1;
+        var periods = EtherBackground.Periods;
+
+        var periodNumber = Array.IndexOf(periods, end);
         var patternEnds = 0;
         while(true)
         {
@@ -78,15 +103,7 @@ public class GliderAnalyzer
             periodNumber %= 4;
         }
         var etherEnter = periods[(periodNumber + 1) % 4];
-        var patternLen = patternEnds - patternBegins + 1;
-        var pattern = new int[patternLen];
-        Array.Copy(tape, patternBegins, pattern, 0, patternLen);
-        return new GenericGlider
-        {
-            EtherEnter = etherEnter,
-            EtherLeave = etherLeave,
-            Pattern = pattern
-        };
+        return (patternEnds, etherEnter);
     }
 
     private bool TestTile(ref int position, 
