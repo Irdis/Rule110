@@ -8,8 +8,13 @@ public class ImgObserver : IObserver
     private ImgBmp _img;
     
     public ImgObserver(int size, string? filePath = null) 
+        : this(size, size, filePath)
     {
-        _img = new ImgBmp(filePath ?? FILE_PATH, size, size, BLOCK_SIZE);
+    }
+
+    public ImgObserver(int width, int height, string? filePath = null) 
+    {
+        _img = new ImgBmp(filePath ?? FILE_PATH, width, height, BLOCK_SIZE);
     }
 
     public void Next(int lvl, int[] tape)

@@ -4,47 +4,65 @@ namespace Rule110;
 
 public class Program
 {
-    public static void Gliders()
+    public static void Main(string[] args)
     {
-        var gl = new EHatGlider();
-        var analyzer = new GliderAnalyzer();
-        var glLst = analyzer.Analyze(gl);
+        CleanUp();
+        /*Classic();*/
+        /*Random();*/
+        C2Order();
+    }
 
-        for (int k = 0; k < glLst.Count; k++)
+    private static void CleanUp()
+    {
+        var files = Directory.GetFiles(".", "*.bmp");
+        foreach(var file in files)
         {
-            const int size = 1000;
+            File.Delete(file);
+        }
+    }
+
+    private static void C2Order()
+    {
+        var eh = new EHatGlider();
+        var c2 = new C2Glider();
+        var analyzer = new GliderAnalyzer();
+        var c2Lst = analyzer.Analyze(c2);
+        var startGlider = 5;
+
+        for (int i = 0; i < 20; i++)
+        {
+            const int width = 1000;
+            const int height = 500;
+
             var background = new EtherBackground();
             var observers = new List<IObserver>
             {
-                new ImgObserver(size, $"img{k+1}.bmp"),
+                new ImgObserver(width, height, $"img_{i}.bmp"),
             };
 
-            var scene = new Scene(size, background, observers);
+            var scene = new Scene(width, background, observers);
 
             var gliders = new List<(int, IGlider)>();
-            gliders.Add((4, new ANGlider(0)));
-            gliders.Add((15, gl));
-            gliders.Add((20, glLst[k]));
+
+            var (tileOffset, orderPosition) = C2Glider.Next(startGlider, i);
+            gliders.Add((26 + tileOffset, c2Lst[C2Glider.OverOrder[orderPosition]]));
+
+            gliders.Add((26, c2Lst[startGlider]));
+            gliders.Add((30, eh));
 
             scene.Init(gliders);
 
             scene.InitComplete();
 
-            for (int j = 1; j < scene.Size; j++)
+            for (int j = 1; j < height; j++)
             {
                 scene.Next();
             }
             scene.Complete();
         }
     }
-    static void Main(string[] args)
-    {
-        /*Classic();*/
-        /*Random();*/
-        Gliders();
-    }
 
-    public static void Classic()
+    private static void Classic()
     {
         const int size = 100;
         var background = new EmptyBackground();
@@ -67,7 +85,7 @@ public class Program
         scene.Complete();
     }
 
-    public static void Random()
+    private static void Random()
     {
         var random = new Random();
         const int size = 1000;
