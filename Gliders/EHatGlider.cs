@@ -48,7 +48,6 @@ public class EHatGlider : IGlider
             tileCount--;
         }
         return (-tileCount, nextGliderNumber);
-
     }
 
     private static int GetOrderOverRow(int ind)
