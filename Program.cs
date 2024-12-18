@@ -1,4 +1,5 @@
 ﻿using Rule110.Gliders;
+using System.Linq;
 
 namespace Rule110;
 
@@ -9,7 +10,8 @@ public class Program
         CleanUp();
         /*Classic();*/
         /*Random();*/
-        C2Order();
+        /*C2Order();*/
+        EOrder();
     }
 
     private static void CleanUp()
@@ -18,6 +20,54 @@ public class Program
         foreach(var file in files)
         {
             File.Delete(file);
+        }
+    }
+
+    private static void EOrder()
+    {
+        var eh1 = new EHatGlider();
+        var c2 = new C2Glider();
+        var analyzer = new GliderAnalyzer();
+        var ehLst = analyzer.Analyze(eh1);
+        var eInd = 20;
+        var prevDepth = 0;
+
+        for (int i = 0; i < 65; i++)
+        {
+            const int width = 1000;
+            const int height = 700;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var patternObserver = new PeriodicPatternObserver(TileUtils.ParseStrip("*      *"), 7);
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+                patternObserver
+            };
+
+            var scene = new Scene(width, background, observers);
+            var (offset1, gliderIndex1) = EHatGlider.Next(eInd, i);
+            var (offset2, gliderIndex2) = EHatGlider.Next(eInd, i + 11);
+            var align2 = EHatGlider.RightAlignment(gliderIndex2);
+            var align1 = EHatGlider.RightAlignment(gliderIndex1);
+
+            var gliders = new List<(int, IGlider)>();
+            gliders.Add((11, c2));
+            gliders.Add((30 + offset2, ehLst[gliderIndex2]));
+            gliders.Add((30 + offset1 + align2, ehLst[gliderIndex1]));
+            gliders.Add((50 + align1 + align2, c2));
+
+            scene.Init(gliders);
+
+            scene.InitComplete();
+
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
+            prevDepth = patternObserver.Depth;
         }
     }
 
@@ -32,7 +82,7 @@ public class Program
         for (int i = 0; i < 20; i++)
         {
             const int width = 1000;
-            const int height = 500;
+            const int height = 700;
 
             var background = new EtherBackground();
             var observers = new List<IObserver>
