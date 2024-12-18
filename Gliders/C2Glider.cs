@@ -18,7 +18,7 @@ public class C2Glider : IGlider
         var tilesCount = nextInd / OverOrder.Length;
         var nextOrdInd = nextInd % OverOrder.Length;
 
-        return (-tilesCount, nextOrdInd);
+        return (-tilesCount, OverOrder[nextOrdInd]);
     }
 }
 

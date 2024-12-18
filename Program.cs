@@ -29,16 +29,19 @@ public class Program
         var c2 = new C2Glider();
         var analyzer = new GliderAnalyzer();
         var ehLst = analyzer.Analyze(eh1);
+        var c2Lst = analyzer.Analyze(c2);
         var eInd = 20;
+        var cInd = 0;
         var prevDepth = 0;
 
-        for (int i = 0; i < 65; i++)
+        for (int k = 3; k < 30; k++)
+        for (int i = 50; i < 51; i++)
         {
             const int width = 1000;
             const int height = 700;
 
             var background = new EtherBackground();
-            var imgName = $"img_{i}.bmp";
+            var imgName = $"img{k}_{i}.bmp";
             var patternObserver = new PeriodicPatternObserver(TileUtils.ParseStrip("*      *"), 7);
             var observers = new List<IObserver>
             {
@@ -51,9 +54,11 @@ public class Program
             var (offset2, gliderIndex2) = EHatGlider.Next(eInd, i + 11);
             var align2 = EHatGlider.RightAlignment(gliderIndex2);
             var align1 = EHatGlider.RightAlignment(gliderIndex1);
+            var (offset3, gliderIndex3) = C2Glider.Next(cInd, k);
 
             var gliders = new List<(int, IGlider)>();
-            gliders.Add((11, c2));
+            gliders.Add((15 + offset3, c2Lst[gliderIndex3]));
+            gliders.Add((15, c2Lst[cInd]));
             gliders.Add((30 + offset2, ehLst[gliderIndex2]));
             gliders.Add((30 + offset1 + align2, ehLst[gliderIndex1]));
             gliders.Add((50 + align1 + align2, c2));
