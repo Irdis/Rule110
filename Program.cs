@@ -34,6 +34,7 @@ public class Program
         var cInd = 0;
         var prevDepth = 0;
 
+        var c2gap = 6;
         for (int k = 3; k < 30; k++)
         for (int i = 50; i < 51; i++)
         {
@@ -51,10 +52,10 @@ public class Program
 
             var scene = new Scene(width, background, observers);
             var (offset1, gliderIndex1) = EHatGlider.Next(eInd, i);
-            var (offset2, gliderIndex2) = EHatGlider.Next(eInd, i + 11);
+            var (offset2, gliderIndex2) = EHatGlider.Next(eInd, i + k);
             var align2 = EHatGlider.RightAlignment(gliderIndex2);
             var align1 = EHatGlider.RightAlignment(gliderIndex1);
-            var (offset3, gliderIndex3) = C2Glider.Next(cInd, k);
+            var (offset3, gliderIndex3) = C2Glider.Next(cInd, c2gap);
 
             var gliders = new List<(int, IGlider)>();
             gliders.Add((15 + offset3, c2Lst[gliderIndex3]));
