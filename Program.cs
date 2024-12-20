@@ -44,7 +44,7 @@ public class Program
         for (int k = 0; k < 50; k++)
         {
             const int width = 1000;
-            const int height = 700;
+            const int height = 1000;
 
             var background = new EtherBackground();
             var imgName = $"img_{k}.bmp";
@@ -92,7 +92,6 @@ public class Program
             scene.Complete();
         }
     }
-
 
     private static void EOrder()
     {
@@ -236,6 +235,4 @@ public class Program
         }
         scene.Complete();
     }
-
-
 }
