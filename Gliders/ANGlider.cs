@@ -25,5 +25,22 @@ public class ANGlider : IGlider
             this.Pattern[i] =  _pattern[i % 4];
         }
     }
+
+    // A4 Glider
+
+    public static int[] UpOrder { get; } = [1, 0, 2];
+
+    public static (int, int) Next(int gliderNumber, int dist = 0)
+    {
+        var ind = Array.IndexOf(UpOrder, gliderNumber);
+        var distWrapAroundCount = (dist + 1) / UpOrder.Length;
+        var tileCount = distWrapAroundCount;
+        var nextInd = (dist + 1) % 3;
+
+        return (-tileCount, UpOrder[nextInd]);
+    }
+
+    public static int RightAlignment(int gliderNumber) => 
+        gliderNumber == 1 ? -1 : 0;
 }
 
