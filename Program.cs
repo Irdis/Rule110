@@ -39,9 +39,9 @@ public class Program
 
         var eInd = 0;
         var aInd = 0;
-        var a4Init = 4;
+        var a4Init = 1;
 
-        for (int k = 0; k < 50; k++)
+        for (int k = 0; k < 70; k++)
         {
             const int width = 1000;
             const int height = 1000;
@@ -54,7 +54,7 @@ public class Program
             };
 
             var scene = new Scene(width, background, observers);
-            var (offset1, gliderIndex1) = EHatGlider.Next(eInd);
+            var (offset1, gliderIndex1) = EHatGlider.Next(eInd, -1);
             var (offset2, gliderIndex2) = EHatGlider.Next(eInd, eGap);
             var align2 = EHatGlider.RightAlignment(gliderIndex2);
             var align1 = EHatGlider.RightAlignment(gliderIndex1);
@@ -64,7 +64,7 @@ public class Program
             var (offset3, gliderIndex3) = ANGlider.Next(aInd, a4Init);
             var align3 = ANGlider.RightAlignment(gliderIndex3);
 
-            var (offset4, gliderIndex4) = ANGlider.Next(aInd, a4Init + aGap + k + 1);
+            var (offset4, gliderIndex4) = ANGlider.Next(gliderIndex3, k);
             var align4 = ANGlider.RightAlignment(gliderIndex4);
 
             var alignTotal = 0;
@@ -75,8 +75,8 @@ public class Program
             gliders.Add((30 + offset3 + alignTotal, a4Lst[gliderIndex3]));
             alignTotal += align3;
 
-            gliders.Add((50 + offset2 + alignTotal, ehLst[gliderIndex2]));
-            alignTotal += align2;
+            /*gliders.Add((50 + offset2 + alignTotal, ehLst[gliderIndex2]));*/
+            /*alignTotal += align2;*/
 
             gliders.Add((50 + offset1 + alignTotal, ehLst[gliderIndex1]));
             alignTotal += align1;
@@ -109,7 +109,7 @@ public class Program
         for (int k = 3; k < 30; k++)
         {
             const int width = 1000;
-            const int height = 700;
+            const int height = 1000;
 
             var background = new EtherBackground();
             var imgName = $"img_{k}.bmp";
@@ -126,11 +126,19 @@ public class Program
             var (offset3, gliderIndex3) = C2Glider.Next(cInd, c2gap);
 
             var gliders = new List<(int, IGlider)>();
+            var alignTotal = 0;
+
             gliders.Add((15 + offset3, c2Lst[gliderIndex3]));
+
             gliders.Add((15, c2Lst[cInd]));
+
             gliders.Add((30 + offset2, ehLst[gliderIndex2]));
-            gliders.Add((30 + offset1 + align2, ehLst[gliderIndex1]));
-            gliders.Add((50 + align1 + align2, c2));
+            alignTotal += align2;
+
+            gliders.Add((30 + offset1 + alignTotal, ehLst[gliderIndex1]));
+            alignTotal += align1;
+
+            gliders.Add((50 + alignTotal, c2));
 
             scene.Init(gliders);
 

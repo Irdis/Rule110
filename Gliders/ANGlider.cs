@@ -7,6 +7,7 @@ public class ANGlider : IGlider
     public int EtherEnter { get; set; }
     public int EtherLeave { get; } = 4;
     public int[] Pattern { get; set; }
+
     public ANGlider(int n)
     {
         if (n == 0)
@@ -32,12 +33,17 @@ public class ANGlider : IGlider
 
     public static (int, int) Next(int gliderNumber, int dist = 0)
     {
-        var ind = Array.IndexOf(UpOrder, gliderNumber);
-        var distWrapAroundCount = (dist + 1) / UpOrder.Length;
-        var tileCount = distWrapAroundCount;
-        var nextInd = (dist + 1) % 3;
+        if (dist == -1)
+            return (0, gliderNumber);
 
-        return (-tileCount, UpOrder[nextInd]);
+        var ind = Array.IndexOf(UpOrder, gliderNumber);
+        var sign = dist < 0 ? -1 : 1;
+        var distWrapAroundCount = Math.Abs(dist + 1) / UpOrder.Length;
+        var tileCount = distWrapAroundCount;
+        var nextInd = (dist + 1) % UpOrder.Length;
+        nextInd = nextInd < 0 ? nextInd + UpOrder.Length : nextInd;
+
+        return (-tileCount * sign, UpOrder[nextInd]);
     }
 
     public static int RightAlignment(int gliderNumber) => 

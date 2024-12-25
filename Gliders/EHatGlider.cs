@@ -28,26 +28,42 @@ public class EHatGlider : IGlider
 
     public static (int, int) Next(int gliderNumber, int dist = 0) 
     {
+        if (dist == -1)
+            return (0, gliderNumber);
+
         var ind = Array.IndexOf(OverOrder, gliderNumber);
-        var distWrapAroundCount = (dist + 1) / OverOrder.Length;
+        var sign = dist < 0 ? -1 : 1;
+        var distWrapAroundCount = Math.Abs(dist + 1) / OverOrder.Length;
         var tileCount = 4 * distWrapAroundCount;
         var nextInd = (ind + dist + 1) % OverOrder.Length;
+        nextInd = nextInd < 0 ? nextInd + OverOrder.Length : nextInd;
 
         var initRow = GetOrderOverRow(ind);
         var destRow = GetOrderOverRow(nextInd);
-        if (destRow < initRow || (destRow == initRow && nextInd < ind))
-            destRow += 4;
-        tileCount += destRow - initRow;
-        
-        var nextGliderNumber = OverOrder[nextInd];
+        if (dist < 0)
+        {
+            if (destRow > initRow || (destRow == initRow && nextInd > ind))
+                initRow += 4;
+            tileCount += initRow - destRow;
+        }
+        else
+        {
+            if (destRow < initRow || (destRow == initRow && nextInd < ind))
+                destRow += 4;
+            tileCount += destRow - initRow;
+        }
+
         if (nextInd == OverOrder.Length - 1)
         {
-            tileCount++;
-        } else if (nextInd == 0)
-        {
             tileCount--;
+        } 
+        else if (nextInd == 0)
+        {
+            tileCount++;
         }
-        return (-tileCount, nextGliderNumber);
+        
+        var nextGliderNumber = OverOrder[nextInd];
+        return (-tileCount * sign, nextGliderNumber);
     }
 
     private static int GetOrderOverRow(int ind)
