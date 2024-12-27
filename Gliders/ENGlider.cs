@@ -43,4 +43,96 @@ public class ENGlider : IGlider
         this.Pattern = pattern;
         this.EtherEnter = etherEntrance;
     }
+
+
+    public static int[] OverOrder { get; } = [
+            5, 12, 4, 11, 3, 10, 2, 9,
+            1, 8, 0, 7, 14, 6, 13
+    ];
+
+    public static int[] OverOrderSectionLengths { get; } = 
+        [ 8, 7 ];
+
+    public static int RightAlignment(int gliderNumber, int n)
+    {
+        if (n > 0 && n % 3 == 0)
+            return 0;
+
+        if ((n + 2) % 3 == 0)
+            return gliderNumber switch 
+            {
+                6 => 1,
+                13 => 1,
+                10 => 1,
+                2 => 1,
+                9 => 1,
+                _ => 0
+            };
+        if ((n + 1) % 3 == 0)
+            return gliderNumber switch {
+                7 => 1,
+                14 => 1,
+                6 => 1,
+                13 => 1,
+                11 => 1,
+                3 => 1,
+                10 => 1,
+                2 => 1,
+                9 => 1,
+                0 => 1,
+                _ => 0
+            };
+
+        return gliderNumber switch {
+            13 => 1,
+             _ => 0
+        };
+    }
+
+    public static (int, int) Adjacent(int gliderNumber, int tileCount)
+    {
+        var (offset, gliderNumber2) = Next(gliderNumber, 7);
+        return (tileCount + 1 + offset, gliderNumber2);
+    }
+
+    public static (int, int) Next(int gliderNumber, int dist) 
+    {
+        if (dist == -1)
+            return (0, gliderNumber);
+
+        var ind = Array.IndexOf(OverOrder, gliderNumber);
+        var sign = dist < 0 ? -1 : 1;
+        var distWrapAroundCount = Math.Abs(dist + 1) / OverOrder.Length;
+        var tileCount = 2 * distWrapAroundCount;
+        var nextInd = (ind + dist + 1) % OverOrder.Length;
+        nextInd = nextInd < 0 ? nextInd + OverOrder.Length : nextInd;
+
+        var initRow = GetOrderOverRow(ind);
+        var destRow = GetOrderOverRow(nextInd);
+        if (dist < 0)
+        {
+            if (destRow > initRow || (destRow == initRow && nextInd > ind))
+                initRow += 2;
+            tileCount += initRow - destRow;
+        }
+        else
+        {
+            if (destRow < initRow || (destRow == initRow && nextInd < ind))
+                destRow += 2;
+            tileCount += destRow - initRow;
+        }
+
+        var nextGliderNumber = OverOrder[nextInd];
+        return (-tileCount * sign, nextGliderNumber);
+    }
+
+
+    private static int GetOrderOverRow(int ind)
+    {
+        var sectionLen = OverOrderSectionLengths[0];
+        if (ind < sectionLen)
+            return 0;
+
+        return 1;
+    }
 }

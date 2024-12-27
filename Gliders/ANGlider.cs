@@ -48,5 +48,23 @@ public class ANGlider : IGlider
 
     public static int RightAlignment(int gliderNumber) => 
         gliderNumber == 1 ? -1 : 0;
+    
+    // A4 Spacing
+    public static int[] AInitialGap { get; } = [2, 1, 3];
+
+    public static (int, int) NextA(int gliderNumber, int dist = 0)
+    {
+        return Next(gliderNumber, AInitialGap[gliderNumber] + dist);
+
+    }
+    // E4 Glider Crossing
+    private static int EUpPeriod = 6;
+    
+    public static int ECrossingInitialGap = 18;
+
+    public static (int, int) NextECrossing(int gliderNumber, int dist = 0)
+    {
+        return NextA(gliderNumber, ECrossingInitialGap + dist * EUpPeriod);
+    }
 }
 
