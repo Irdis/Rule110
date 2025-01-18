@@ -38,8 +38,20 @@ public class ANGlider : IGlider
         var sign = dist < 0 ? -1 : 1;
         var distWrapAroundCount = Math.Abs(dist + 1) / UpOrder.Length;
         var tileCount = distWrapAroundCount;
-        var nextInd = (dist + 1) % UpOrder.Length;
+        var nextInd = (ind + dist + 1) % UpOrder.Length;
         nextInd = nextInd < 0 ? nextInd + UpOrder.Length : nextInd;
+
+
+        if (dist < 0)
+        {
+            if (ind < nextInd)
+                tileCount++;
+        } 
+        else 
+        {
+            if (nextInd < ind)
+                tileCount++;
+        }
 
         return (-tileCount * sign, UpOrder[nextInd]);
     }
@@ -48,11 +60,13 @@ public class ANGlider : IGlider
         gliderNumber == 1 ? -1 : 0;
     
     // A4 Spacing
-    public static int[] AInitialGap { get; } = [2, 1, 3];
-
     public static (int, int) NextA(int gliderNumber, int dist = 0)
     {
-        return Next(gliderNumber, AInitialGap[gliderNumber] + dist);
+        if (dist == -1)
+            return (0, gliderNumber);
+        if (dist < 0)
+            return Next(gliderNumber, -1 + dist);
+        return Next(gliderNumber, 1 + dist);
     }
 
     // E4 Glider Crossing

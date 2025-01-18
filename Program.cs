@@ -11,8 +11,10 @@ public class Program
         /*Random();*/
         /*C2Order();*/
         /*EOrder();*/
-        ENOrder();
+        /*ENOrder();*/
         /*A4Order();*/
+        A4ECrossingOrder();
+        /*Encoder();*/
     }
 
     private static void CleanUp()
@@ -21,6 +23,45 @@ public class Program
         foreach(var file in files)
         {
             File.Delete(file);
+        }
+    }
+
+    public static void Encoder()
+    {
+        string[] patterns = [
+            "BBAABBAABB",
+            "BBBABBB"
+        ];
+        var a4GliderCollection = new ANGliderCollection(3);
+        for (int i = 0; i < patterns.Length; i++)
+        {
+            var pattern = patterns[i];
+            var encoder = new BlockEncoder(a4GliderCollection);
+
+            const int width = 1000;
+            const int height = 1000;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+            var gliders = new List<(int, IGlider)>();
+            var blocks = BlockEncoder.Parse(pattern);
+            encoder.Encode(blocks, gliders);
+
+            scene.Init(gliders);
+
+            scene.InitComplete();
+
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
         }
     }
 
@@ -80,6 +121,75 @@ public class Program
 
     private static void A4Order()
     {
+        var a4 = new ANGlider(3);
+        var c2 = new C2Glider();
+        var analyzer = new GliderAnalyzer();
+        var a4Lst = analyzer.Analyze(a4);
+
+        var aInd = 2;
+
+        for (int k = 0; k < 50; k++)
+        {
+            const int width = 1000;
+            const int height = 1000;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{k}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+
+            var gliders = new List<(int, IGlider)>();
+            
+            var (offset1, gliderIndex1) = ANGlider.NextA(aInd, -3);
+            var align1 = ANGlider.RightAlignment(gliderIndex1);
+
+            var (offset2, gliderIndex2) = ANGlider.NextA(gliderIndex1, -3 - k);
+            var align2 = ANGlider.RightAlignment(gliderIndex2);
+
+            var (offset3, gliderIndex3) = ANGlider.NextA(gliderIndex2, -3);
+            var align3 = ANGlider.RightAlignment(gliderIndex3);
+
+            var offset = 30;
+            var align = 0;
+
+            gliders.Add((offset, a4Lst[aInd]));
+
+            offset += offset1;
+            gliders.Add((offset, a4Lst[gliderIndex1]));
+            offset += align1;
+            align += align1;
+
+            offset += offset2;
+            gliders.Add((offset, a4Lst[gliderIndex2]));
+            offset += align2;
+            align += align2;
+
+            offset += offset3;
+            gliders.Add((offset, a4Lst[gliderIndex2]));
+            offset += align3;
+            align += align3;
+
+            gliders.Add((50 + align, c2));
+
+            scene.Init(gliders);
+
+            scene.InitComplete();
+
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
+        }
+    }
+
+
+    private static void A4ECrossingOrder()
+    {
         var eh1 = new EHatGlider();
         var c2 = new C2Glider();
         var a4 = new ANGlider(3);
@@ -129,7 +239,6 @@ public class Program
 
             var alignTotal = 0;
 
-            Console.WriteLine(offsetATotal);
             gliders.Add((30 + offsetATotal + alignTotal, a4Lst[gliderIndex5]));
             alignTotal += align5;
             offsetATotal -= offset5;
@@ -243,7 +352,7 @@ public class Program
             var gliders = new List<(int, IGlider)>();
 
             var (tileOffset, orderPosition) = C2Glider.Next(startGlider, i);
-            gliders.Add((26 + tileOffset, c2Lst[C2Glider.OverOrder[orderPosition]]));
+            gliders.Add((26 + tileOffset, c2Lst[orderPosition]));
 
             gliders.Add((26, c2Lst[startGlider]));
             gliders.Add((30, eh));
