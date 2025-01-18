@@ -33,19 +33,15 @@ public class Program
 
         var analyzer = new GliderAnalyzer();
         var enLst = analyzer.Analyze(en1);
-        var lst1 = new List<(int, int)>();
-        var lst2 = new List<(int, int)>();
         var enInd = 1;
 
-        for (int u = 0; u < 2; u++)
         for (int k = 0; k < 40; k++)
         {
             const int width = 1000;
             const int height = 1000;
 
             var background = new EtherBackground();
-            /*var imgName = $"img_{u}_{k}.bmp";*/
-            var imgName = $"img_{k}_{u}.bmp";
+            var imgName = $"img_{k}.bmp";
             var patternObserver = new PeriodicPatternObserver(TileUtils.ParseStrip("*......*"), 7);
             var observers = new List<IObserver>
             {
@@ -61,21 +57,13 @@ public class Program
 
             var (offset2, gliderIndex2) = ENGlider.Adjacent(gliderIndex1, offset1);
             var align2 = ENGlider.RightAlignment(gliderIndex2, enGliderType);
-            Console.WriteLine($"{k} {offset1} {gliderIndex1}");
-            Console.WriteLine($"{k} {offset2} {gliderIndex2}");
-            Console.WriteLine();
 
             var alignTotal = 0;
 
             gliders.Add((15 + alignTotal, c2));
 
-            if (u == 0) {
-                gliders.Add((30 + offset1 + alignTotal, enLst[gliderIndex1]));
-                alignTotal += align1;
-            } else {
-                gliders.Add((30 + offset2 + alignTotal, enLst[gliderIndex2]));
-                alignTotal += align2;
-            }
+            gliders.Add((30 + offset1 + alignTotal, enLst[gliderIndex1]));
+            alignTotal += align1;
 
             gliders.Add((50 + alignTotal, c2));
 
@@ -88,19 +76,7 @@ public class Program
                 scene.Next();
             }
             scene.Complete();
-            if (u == 0)
-                lst1.Add((gliderIndex1, patternObserver.Depth));
-            if (u == 1)
-                lst2.Add((gliderIndex2, patternObserver.Depth));
         }
-
-        /*for (int i = 0; i < lst1.Count; i++)*/
-        /*{*/
-        /*    Console.WriteLine($"{lst1[i].Item1} {lst1[i].Item2}");*/
-        /*    Console.WriteLine($"{lst2[i].Item1} {lst2[i].Item2}");*/
-        /*    Console.WriteLine();*/
-        /*}*/
-        Console.WriteLine();
     }
 
     private static void A4Order()
