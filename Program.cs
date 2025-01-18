@@ -1,5 +1,4 @@
 ﻿using Rule110.Gliders;
-using System.Linq;
 
 namespace Rule110;
 

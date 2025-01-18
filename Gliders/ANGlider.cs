@@ -16,7 +16,6 @@ public class ANGlider : IGlider
             return;
         }
         var m = n - 1;
-        // 2 4 4 6 8 8 10 12 12
         var len = 2 * (2 * (m / 3) + (m % 3 == 0 ? 0 : 1) + 1);
         this.EtherEnter = _etherEnters[m % 3];
 
@@ -28,7 +27,6 @@ public class ANGlider : IGlider
     }
 
     // A4 Glider
-
     public static int[] UpOrder { get; } = [1, 0, 2];
 
     public static (int, int) Next(int gliderNumber, int dist = 0)
@@ -55,8 +53,8 @@ public class ANGlider : IGlider
     public static (int, int) NextA(int gliderNumber, int dist = 0)
     {
         return Next(gliderNumber, AInitialGap[gliderNumber] + dist);
-
     }
+
     // E4 Glider Crossing
     private static int EUpPeriod = 6;
     
