@@ -9,5 +9,6 @@ public enum BlockType
     C,
     D,
     E,
+    F,
 }
 

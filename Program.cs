@@ -29,8 +29,8 @@ public class Program
     public static void Encoder()
     {
         string[] patterns = [
-            /*"BCED"*/
-            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCED",
+            /*"BCEDFD"*/
+            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCEDFD",
         ];
         var a4GliderCollection = new ANGliderCollection(3);
         var ehGliderCollecion = new EHatGliderCollection();
@@ -43,8 +43,8 @@ public class Program
                     i
             );
 
-            const int width = 5000;
-            const int height = 5000;
+            const int width = 2500;
+            const int height = 2500;
 
             var background = new EtherBackground();
             var imgName = $"img_{i}.bmp";
