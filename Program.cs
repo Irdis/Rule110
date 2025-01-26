@@ -29,7 +29,8 @@ public class Program
     public static void Encoder()
     {
         string[] patterns = [
-            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCE",
+            /*"BCED"*/
+            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCED",
         ];
         var a4GliderCollection = new ANGliderCollection(3);
         var ehGliderCollecion = new EHatGliderCollection();

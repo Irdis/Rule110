@@ -47,6 +47,9 @@ public class BlockEncoder
                 case BlockType.C:
                     EncodeC(gliders);
                     break;
+                case BlockType.D:
+                    EncodeD(gliders);
+                    break;
                 case BlockType.E:
                     EncodeE(gliders);
                     break;
@@ -108,6 +111,18 @@ public class BlockEncoder
         _alignment += align;
     }
 
+    public void EncodeD(List<(int, IGlider)> gliders)
+    {
+        var (ehOffset, ehNumber) = EHatGlider.Next(_ehGliderNumber, -12);
+        _offset += ehOffset;
+
+        var align = EHatGlider.RightAlignment(_ehGliderNumber);
+        gliders.Add((_offset, _eh.Get(ehNumber)));
+        _offset += align;
+        _alignment += align;
+        _ehGliderNumber = ehNumber;
+    }
+
     public void EncodeE(List<(int, IGlider)> gliders)
     {
         for (int i = 0; i < 3; i++)
@@ -132,6 +147,7 @@ public class BlockEncoder
                 'A' => BlockType.A,
                 'B' => BlockType.B,
                 'C' => BlockType.C,
+                'D' => BlockType.D,
                 'E' => BlockType.E,
                 _ => throw new NotImplementedException("Unknown block " + ch)
             });
