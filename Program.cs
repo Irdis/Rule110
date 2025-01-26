@@ -13,8 +13,8 @@ public class Program
         /*EOrder();*/
         /*ENOrder();*/
         /*A4Order();*/
-        A4ECrossingOrder();
-        /*Encoder();*/
+        /*A4ECrossingOrder();*/
+        Encoder();
     }
 
     private static void CleanUp()
@@ -29,17 +29,21 @@ public class Program
     public static void Encoder()
     {
         string[] patterns = [
-            "BBAABBAABB",
-            "BBBABBB"
+            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCE",
         ];
         var a4GliderCollection = new ANGliderCollection(3);
+        var ehGliderCollecion = new EHatGliderCollection();
         for (int i = 0; i < patterns.Length; i++)
         {
             var pattern = patterns[i];
-            var encoder = new BlockEncoder(a4GliderCollection);
+            var encoder = new BlockEncoder(
+                    a4GliderCollection,
+                    ehGliderCollecion,
+                    i
+            );
 
-            const int width = 1000;
-            const int height = 1000;
+            const int width = 5000;
+            const int height = 5000;
 
             var background = new EtherBackground();
             var imgName = $"img_{i}.bmp";
