@@ -29,22 +29,31 @@ public class Program
     public static void Encoder()
     {
         string[] patterns = [
-            /*"BCEDFD"*/
-            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCEDFD",
+            "BCEG",
+            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCEDFG",
         ];
         var a4GliderCollection = new ANGliderCollection(3);
         var ehGliderCollecion = new EHatGliderCollection();
+        var en1GliderCollecion = new ENGliderCollection(0);
+        var en4GliderCollecion = new ENGliderCollection(3);
+
         for (int i = 0; i < patterns.Length; i++)
+        /*for (int i = 0; i <= 14; i++)*/
         {
             var pattern = patterns[i];
+            /*var pattern = patterns[0];*/
             var encoder = new BlockEncoder(
                     a4GliderCollection,
                     ehGliderCollecion,
+                    en1GliderCollecion,
+                    en4GliderCollecion,
                     i
             );
 
-            const int width = 2500;
-            const int height = 2500;
+            /*const int width = 1000;*/
+            /*const int height = 1000;*/
+            const int width = 5000;
+            const int height = 5000;
 
             var background = new EtherBackground();
             var imgName = $"img_{i}.bmp";

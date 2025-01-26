@@ -6,6 +6,8 @@ public class BlockEncoder
 {
     private ANGliderCollection _a4;
     private EHatGliderCollection _eh;
+    private ENGliderCollection _en1;
+    private ENGliderCollection _en4;
 
     private int _a4GliderNumber = 2;
     private int _a4GliderDist;
@@ -22,11 +24,15 @@ public class BlockEncoder
     public BlockEncoder(
         ANGliderCollection a4,
         EHatGliderCollection eh,
+        ENGliderCollection en1,
+        ENGliderCollection en4,
         params object[] args
     )
     {
         _a4 = a4;
         _eh = eh;
+        _en1 = en1;
+        _en4 = en4;
         _args = args;
     }
 
@@ -55,6 +61,9 @@ public class BlockEncoder
                     break;
                 case BlockType.F:
                     EncodeF(gliders);
+                    break;
+                case BlockType.G:
+                    EncodeG(gliders);
                     break;
             }
         }
@@ -157,6 +166,35 @@ public class BlockEncoder
         }
     }
 
+    public void EncodeG(List<(int, IGlider)> gliders)
+    {
+        var (ehOffset, ehNumber) = EHatGlider.Next(_ehGliderNumber, -10);
+        _offset += ehOffset;
+        _offset += 2;
+
+        var align = EHatGlider.RightAlignment(_ehGliderNumber);
+        gliders.Add((_offset, _eh.Get(ehNumber)));
+        _offset += align;
+        _alignment += align;
+        _ehGliderNumber = ehNumber;
+
+        var e1Number = 4;
+
+        _offset += 1;
+        align = ENGlider.RightAlignment(e1Number, _en1.N);
+        gliders.Add((_offset, _en1.Get(e1Number)));
+        _offset += align;
+        _alignment += align;
+
+        var e4Number = 4;
+
+        _offset += 4;
+        align = ENGlider.RightAlignment(e4Number, _en4.N);
+        gliders.Add((_offset, _en4.Get(e4Number)));
+        _offset += align;
+        _alignment += align;
+    }
+
     public static List<BlockType> Parse(string str)
     {
         var lst = new List<BlockType>(str.Length);
@@ -169,6 +207,7 @@ public class BlockEncoder
                 'D' => BlockType.D,
                 'E' => BlockType.E,
                 'F' => BlockType.F,
+                'G' => BlockType.G,
                 _ => throw new NotImplementedException("Unknown block " + ch)
             });
         }
