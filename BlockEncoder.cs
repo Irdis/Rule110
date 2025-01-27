@@ -152,7 +152,7 @@ public class BlockEncoder
 
     public void EncodeF(List<(int, IGlider)> gliders)
     {
-        int[] gaps = [-60, -52, -60];
+        int[] gaps = [-60, -48, -60];
         for (int i = 0; i < 3; i++)
         {
             var (ehOffset, ehNumber) = EHatGlider.Next(_ehGliderNumber, gaps[i]);
@@ -193,6 +193,23 @@ public class BlockEncoder
         gliders.Add((_offset, _en4.Get(e4Number)));
         _offset += align;
         _alignment += align;
+
+        (int, int)[] es = [
+            (27, 2),
+            (1, 2),
+            (5, 3),
+            (2, 2),
+            (28, 3)
+        ];
+        foreach (var (ehNumber2, offset2) in es)
+        {
+            _offset += offset2;
+            align = EHatGlider.RightAlignment(ehNumber2);
+            gliders.Add((_offset, _eh.Get(ehNumber2)));
+            _offset += align;
+            _alignment += align;
+            _ehGliderNumber = ehNumber2;
+        }
     }
 
     public static List<BlockType> Parse(string str)

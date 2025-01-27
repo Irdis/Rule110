@@ -29,8 +29,9 @@ public class Program
     public static void Encoder()
     {
         string[] patterns = [
-            "BCEG",
-            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCEDFG",
+            /*"BCFG",*/
+            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCEG",
+            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCFG",
         ];
         var a4GliderCollection = new ANGliderCollection(3);
         var ehGliderCollecion = new EHatGliderCollection();
@@ -38,7 +39,7 @@ public class Program
         var en4GliderCollecion = new ENGliderCollection(3);
 
         for (int i = 0; i < patterns.Length; i++)
-        /*for (int i = 0; i <= 14; i++)*/
+        /*for (int i = 0; i < 30; i++)*/
         {
             var pattern = patterns[i];
             /*var pattern = patterns[0];*/
