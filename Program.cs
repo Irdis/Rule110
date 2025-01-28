@@ -30,8 +30,9 @@ public class Program
     {
         string[] patterns = [
             /*"BCFG",*/
-            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCEG",
-            "BAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAAAABCFG",
+            "B 13A B 11A B 12A B C E G",
+            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
+            "B 13A B 11A B 12A B C F G",
         ];
         var a4GliderCollection = new ANGliderCollection(3);
         var ehGliderCollecion = new EHatGliderCollection();

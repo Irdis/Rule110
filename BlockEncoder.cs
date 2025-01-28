@@ -36,42 +36,34 @@ public class BlockEncoder
         _args = args;
     }
 
-    public void Encode(List<BlockType> blocks, List<(int, IGlider)> gliders)
+    public void Encode(List<BlockItem> blocks, List<(int, IGlider)> gliders)
     {
         _a4GliderNumber = GetA4StartingNumber(blocks);
 
-        foreach(var block in blocks)
+        foreach (var block in blocks)
         {
-            switch(block)
+            Action<List<(int, IGlider)>> fn = block.Type switch
             {
-                case BlockType.A: 
-                    EncodeA(gliders);
-                    break;
-                case BlockType.B:
-                    EncodeB(gliders);
-                    break;
-                case BlockType.C:
-                    EncodeC(gliders);
-                    break;
-                case BlockType.D:
-                    EncodeD(gliders);
-                    break;
-                case BlockType.E:
-                    EncodeE(gliders);
-                    break;
-                case BlockType.F:
-                    EncodeF(gliders);
-                    break;
-                case BlockType.G:
-                    EncodeG(gliders);
-                    break;
+                BlockType.A => EncodeA,
+                BlockType.B => EncodeB,
+                BlockType.C => EncodeC,
+                BlockType.D => EncodeD,
+                BlockType.E => EncodeE,
+                BlockType.F => EncodeF,
+                BlockType.G => EncodeG,
+            };
+            for (int i = 0; i < block.Count; i++)
+            {
+                fn(gliders);
             }
         }
     }
 
-    public int GetA4StartingNumber(List<BlockType> blocks)
+    public int GetA4StartingNumber(List<BlockItem> blocks)
     {
-        var bs = blocks.Count(b => b == BlockType.B);
+        var bs = blocks
+            .Where(b => b.Type == BlockType.B)
+            .Sum(b => b.Count);
         return _a4ToERelation[bs % 3];
     }
 
@@ -212,21 +204,57 @@ public class BlockEncoder
         }
     }
 
-    public static List<BlockType> Parse(string str)
+    public static List<BlockItem> Parse(string str)
     {
-        var lst = new List<BlockType>(str.Length);
-        foreach(var ch in str)
+        var lst = new List<BlockItem>(str.Length);
+
+        var expectCharOrDigit = true;
+        var expectDigit = false;
+        var expectChar = false;
+
+        BlockItem block = null;
+        int ind = 0;
+        while (ind < str.Length)
         {
-            lst.Add(ch switch {
-                'A' => BlockType.A,
-                'B' => BlockType.B,
-                'C' => BlockType.C,
-                'D' => BlockType.D,
-                'E' => BlockType.E,
-                'F' => BlockType.F,
-                'G' => BlockType.G,
-                _ => throw new NotImplementedException("Unknown block " + ch)
-            });
+            var ch = str[ind];
+            if (ch == ' ')
+            {
+                ind++;
+                continue;
+            }
+
+            if (expectCharOrDigit)
+            {
+                expectCharOrDigit = false;
+                expectChar = 'A' <= ch && ch <= 'Z';
+            } 
+            else if (expectChar)
+            {
+                lst.Add(new BlockItem()
+                {
+                    Type = (BlockType)ch - 'A',
+                    Count = 1
+                });
+                ind++;
+                expectCharOrDigit = true;
+            } 
+            else 
+            {
+                var count = 0;
+                while ('0' <= ch && ch <= '9')
+                {
+                    count = count * 10 + ch - '0';
+                    ch = str[++ind];
+                }
+                lst.Add(new BlockItem()
+                {
+                    Type = (BlockType)ch - 'A',
+                    Count = count
+                });
+                
+                ind++;
+                expectCharOrDigit = true;
+            }
         }
         return lst;
     }
