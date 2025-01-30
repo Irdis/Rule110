@@ -29,21 +29,21 @@ public class Program
     public static void Encoder()
     {
         string[] patterns = [
-            /*"BCFG",*/
-            "B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B C F G",
+            "BCFGJ",
+            /*"B 13A B 11A B 12A B C E G",*/
+            /*"B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",*/
+            /*"B 13A B 11A B 12A B C F G",*/
         ];
         var a4GliderCollection = new ANGliderCollection(3);
         var ehGliderCollecion = new EHatGliderCollection();
         var en1GliderCollecion = new ENGliderCollection(0);
         var en4GliderCollecion = new ENGliderCollection(3);
 
-        for (int i = 0; i < patterns.Length; i++)
-        /*for (int i = 0; i < 30; i++)*/
+        /*for (int i = 0; i < patterns.Length; i++)*/
+        for (int i = 0; i < 30; i++)
         {
-            var pattern = patterns[i];
-            /*var pattern = patterns[0];*/
+            /*var pattern = patterns[i];*/
+            var pattern = patterns[0];
             var encoder = new BlockEncoder(
                     a4GliderCollection,
                     ehGliderCollecion,
@@ -52,10 +52,10 @@ public class Program
                     i
             );
 
-            /*const int width = 1000;*/
-            /*const int height = 1000;*/
-            const int width = 5000;
-            const int height = 5000;
+            const int width = 1500;
+            const int height = 1000;
+            /*const int width = 5000;*/
+            /*const int height = 5000;*/
 
             var background = new EtherBackground();
             var imgName = $"img_{i}.bmp";

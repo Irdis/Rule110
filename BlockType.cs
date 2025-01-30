@@ -11,5 +11,8 @@ public enum BlockType
     E,
     F,
     G,
+    H,
+    I,
+    J
 }
 

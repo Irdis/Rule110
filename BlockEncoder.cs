@@ -51,6 +51,9 @@ public class BlockEncoder
                 BlockType.E => EncodeE,
                 BlockType.F => EncodeF,
                 BlockType.G => EncodeG,
+                BlockType.H => EncodeH,
+                BlockType.I => EncodeI,
+                BlockType.J => EncodeJ,
             };
             for (int i = 0; i < block.Count; i++)
             {
@@ -59,7 +62,7 @@ public class BlockEncoder
         }
     }
 
-    public int GetA4StartingNumber(List<BlockItem> blocks)
+    private int GetA4StartingNumber(List<BlockItem> blocks)
     {
         var bs = blocks
             .Where(b => b.Type == BlockType.B)
@@ -67,7 +70,7 @@ public class BlockEncoder
         return _a4ToERelation[bs % 3];
     }
 
-    public void EncodeA(List<(int, IGlider)> gliders)
+    private void EncodeA(List<(int, IGlider)> gliders)
     {
         if (!_hasA4)
         {
@@ -76,7 +79,7 @@ public class BlockEncoder
         _a4GliderDist += -3 * 2;
     }
 
-    public void EncodeB(List<(int, IGlider)> gliders)
+    private void EncodeB(List<(int, IGlider)> gliders)
     {
         if (!_hasA4)
         {
@@ -102,7 +105,7 @@ public class BlockEncoder
         _a4GliderNumber = a4Number;
     }
 
-    public void EncodeC(List<(int, IGlider)> gliders)
+    private void EncodeC(List<(int, IGlider)> gliders)
     {
         _a4GliderDist += -16;
 
@@ -115,7 +118,7 @@ public class BlockEncoder
         _alignment += align;
     }
 
-    public void EncodeD(List<(int, IGlider)> gliders)
+    private void EncodeD(List<(int, IGlider)> gliders)
     {
         var (ehOffset, ehNumber) = EHatGlider.Next(_ehGliderNumber, -12);
         _offset += ehOffset;
@@ -127,7 +130,7 @@ public class BlockEncoder
         _ehGliderNumber = ehNumber;
     }
 
-    public void EncodeE(List<(int, IGlider)> gliders)
+    private void EncodeE(List<(int, IGlider)> gliders)
     {
         for (int i = 0; i < 3; i++)
         {
@@ -142,7 +145,7 @@ public class BlockEncoder
         }
     }
 
-    public void EncodeF(List<(int, IGlider)> gliders)
+    private void EncodeF(List<(int, IGlider)> gliders)
     {
         int[] gaps = [-60, -48, -60];
         for (int i = 0; i < 3; i++)
@@ -158,7 +161,7 @@ public class BlockEncoder
         }
     }
 
-    public void EncodeG(List<(int, IGlider)> gliders)
+    private void EncodeG(List<(int, IGlider)> gliders)
     {
         var (ehOffset, ehNumber) = EHatGlider.Next(_ehGliderNumber, -10);
         _offset += ehOffset;
@@ -186,21 +189,61 @@ public class BlockEncoder
         _offset += align;
         _alignment += align;
 
-        (int, int)[] es = [
+        AddEs(gliders, [
             (27, 2),
             (1, 2),
             (5, 3),
             (2, 2),
             (28, 3)
-        ];
-        foreach (var (ehNumber2, offset2) in es)
+        ]);
+    }
+
+    private void EncodeH(List<(int, IGlider)> gliders)
+    {
+        AddEs(gliders, [
+            (6, 1),
+            (12, 1),
+            (13, 2),
+            (21, 2),
+            (24, 3),
+            (20, 2),
+        ]);
+    }
+
+    private void EncodeI(List<(int, IGlider)> gliders)
+    {
+        AddEs(gliders, [
+            (6, 1),
+            (18, 3),
+            (29, 1),
+            (7, 1),
+            (10, 3),
+            (6, 3),
+        ]);
+    }
+
+    private void EncodeJ(List<(int, IGlider)> gliders)
+    {
+        AddEs(gliders, [
+            (0, 2),
+            (12, 3),
+            (23, 1),
+            (1, 1),
+            (4, 3),
+            (0, 3),
+        ]);
+    }
+
+    private void AddEs(List<(int, IGlider)> gliders, (int, int)[] es)
+    {
+        foreach (var (ehNumber, offset) in es)
         {
-            _offset += offset2;
-            align = EHatGlider.RightAlignment(ehNumber2);
-            gliders.Add((_offset, _eh.Get(ehNumber2)));
+            _offset += offset;
+            var align = EHatGlider.RightAlignment(ehNumber);
+            gliders.Add((_offset, _eh.Get(ehNumber)));
             _offset += align;
             _alignment += align;
-            _ehGliderNumber = ehNumber2;
+            _ehGliderNumber = ehNumber;
         }
     }
 
@@ -209,10 +252,8 @@ public class BlockEncoder
         var lst = new List<BlockItem>(str.Length);
 
         var expectCharOrDigit = true;
-        var expectDigit = false;
         var expectChar = false;
 
-        BlockItem block = null;
         int ind = 0;
         while (ind < str.Length)
         {
