@@ -44,7 +44,6 @@ public class ENGlider : IGlider
         this.EtherEnter = etherEntrance;
     }
 
-
     public static int[] OverOrder { get; } = [
             5, 12, 4, 11, 3, 10, 2, 9,
             1, 8, 0, 7, 14, 6, 13

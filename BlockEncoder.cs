@@ -7,7 +7,9 @@ public class BlockEncoder
     private ANGliderCollection _a4;
     private EHatGliderCollection _eh;
     private ENGliderCollection _en1;
+    private ENGliderCollection _en2;
     private ENGliderCollection _en4;
+    private ENGliderCollection _en5;
 
     private int _a4GliderNumber = 2;
     private int _a4GliderDist;
@@ -25,14 +27,18 @@ public class BlockEncoder
         ANGliderCollection a4,
         EHatGliderCollection eh,
         ENGliderCollection en1,
+        ENGliderCollection en2,
         ENGliderCollection en4,
+        ENGliderCollection en5,
         params object[] args
     )
     {
         _a4 = a4;
         _eh = eh;
         _en1 = en1;
+        _en2 = en2;
         _en4 = en4;
+        _en5 = en5;
         _args = args;
     }
 
@@ -54,6 +60,8 @@ public class BlockEncoder
                 BlockType.H => EncodeH,
                 BlockType.I => EncodeI,
                 BlockType.J => EncodeJ,
+                BlockType.K => EncodeK,
+                BlockType.L => EncodeL,
             };
             for (int i = 0; i < block.Count; i++)
             {
@@ -231,6 +239,76 @@ public class BlockEncoder
             (1, 1),
             (4, 3),
             (0, 3),
+        ]);
+    }
+
+    private void EncodeK(List<(int, IGlider)> gliders)
+    {
+        var e5Number = 4;
+
+        _offset += 1;
+        var align = ENGlider.RightAlignment(e5Number, _en5.N);
+        gliders.Add((_offset, _en5.Get(e5Number)));
+        _offset += align;
+        _alignment += align;
+
+        var e2Number = 1;
+
+        _offset += 1;
+        align = ENGlider.RightAlignment(e2Number, _en2.N);
+        gliders.Add((_offset, _en2.Get(e2Number)));
+        _offset += align;
+        _alignment += align;
+
+        var e4Number = 4;
+
+        _offset += 4;
+        align = ENGlider.RightAlignment(e4Number, _en4.N);
+        gliders.Add((_offset, _en4.Get(e4Number)));
+        _offset += align;
+        _alignment += align;
+
+
+        AddEs(gliders, [
+            (27, 2),
+            (1, 2),
+            (5, 3),
+            (2, 2),
+            (28, 3)
+        ]);
+    }
+
+    private void EncodeL(List<(int, IGlider)> gliders)
+    {
+        var e5Number = 4;
+
+        _offset += 1;
+        var align = ENGlider.RightAlignment(e5Number, _en5.N);
+        gliders.Add((_offset, _en5.Get(e5Number)));
+        _offset += align;
+        _alignment += align;
+
+        var e2Number = 1;
+
+        _offset += 1;
+        align = ENGlider.RightAlignment(e2Number, _en2.N);
+        gliders.Add((_offset, _en2.Get(e2Number)));
+        _offset += align;
+        _alignment += align;
+
+        var e4Number = 10;
+
+        _offset += 6;
+        align = ENGlider.RightAlignment(e4Number, _en4.N);
+        gliders.Add((_offset, _en4.Get(e4Number)));
+        _offset += align;
+        _alignment += align;
+
+
+        AddEs(gliders, [ 
+            (21, 1),
+            (28, 1),
+            (12, 1),
         ]);
     }
 

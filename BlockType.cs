@@ -13,6 +13,8 @@ public enum BlockType
     G,
     H,
     I,
-    J
+    J,
+    K,
+    L
 }
 
