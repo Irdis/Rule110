@@ -14,7 +14,9 @@ public class Program
         /*ENOrder();*/
         /*A4Order();*/
         /*A4ECrossingOrder();*/
-        Encoder();
+        // Encoder();
+        EHRelOrderTest();
+        // EHRelOrderConstruction();
     }
 
     private static void CleanUp()
@@ -23,6 +25,108 @@ public class Program
         foreach(var file in files)
         {
             File.Delete(file);
+        }
+    }
+
+    public static void EHRelOrderConstruction()
+    {
+        var ehGliderCollection = new EHatGliderCollection();
+        var c2GliderCollection = new C2GliderCollection();
+
+        for (int i = 0; i < EHatGlider.Size; i++)
+        {
+            const int width = 500;
+            const int height = 500;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+            var gliders = new List<(int, IGlider)>();
+            var offset = 5;
+            var alignment = 0;
+
+            var alignDelta = EHatGlider.RightAlignment(0);
+            gliders.Add((offset, ehGliderCollection.Get(0)));
+            offset += alignDelta;
+            alignment += alignDelta;
+
+            var (ehOffset, ehNumber) = (1, i);
+            offset += ehOffset;
+
+            alignDelta = EHatGlider.RightAlignment(ehNumber);
+            gliders.Add((offset, ehGliderCollection.Get(ehNumber)));
+            offset += alignDelta;
+            alignment += alignDelta;
+
+            offset = 40 + alignDelta;
+
+            gliders.Add((offset, c2GliderCollection.Get(0)));
+            offset += alignDelta;
+            alignment += alignDelta;
+
+            scene.Init(gliders);
+            scene.InitComplete();
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
+        }
+    }
+
+    public static void EHRelOrderTest()
+    {
+        var ehGliderCollection = new EHatGliderCollection();
+        var c2GliderCollection = new C2GliderCollection();
+
+        for (int i = 0; i < 100; i++)
+        {
+            const int width = 500;
+            const int height = 500;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+            var gliders = new List<(int, IGlider)>();
+            var offset = 5;
+            var alignment = 0;
+
+            var alignDelta = EHatGlider.RightAlignment(0);
+            gliders.Add((offset, ehGliderCollection.Get(0)));
+            offset += alignDelta;
+            alignment += alignDelta;
+
+            var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(0, i + 1, 1);
+            offset += ehOffset;
+
+            alignDelta = EHatGlider.RightAlignment(ehNumber);
+            gliders.Add((offset, ehGliderCollection.Get(ehNumber)));
+            offset += alignDelta;
+            alignment += alignDelta;
+
+            offset = 40 + alignDelta;
+
+            gliders.Add((offset, c2GliderCollection.Get(0)));
+            offset += alignDelta;
+            alignment += alignDelta;
+
+            scene.Init(gliders);
+            scene.InitComplete();
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
         }
     }
 
@@ -106,7 +210,7 @@ public class Program
             var observers = new List<IObserver>
             {
                 new ImgObserver(width, height, imgName),
-                    patternObserver
+                patternObserver
             };
 
             var scene = new Scene(width, background, observers);

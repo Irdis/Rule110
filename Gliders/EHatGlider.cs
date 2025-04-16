@@ -6,6 +6,9 @@ public class EHatGlider : IGlider
     public int EtherEnter { get; } = 0;
     public int EtherLeave { get; } = 4;
     public int[] Pattern { get; } = _pattern;
+
+    public static int Size { get; } = 30;
+
     public static int[] OverOrder { get; } = [
             24, 1, 8, 15, 22, 29, 6,
             13, 20, 27, 4, 11, 18, 25, 2,
