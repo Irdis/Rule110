@@ -6,18 +6,16 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        // EHatGliderRelativeOrder.AnalyzeRelOrder(29);
-        // return;
         CleanUp();
-        /*Classic();*/
-        /*Random();*/
-        /*C2Order();*/
-        /*EOrder();*/
-        /*ENOrder();*/
-        /*A4Order();*/
-        /*A4ECrossingOrder();*/
+        // Classic();
+        // Random();
+        // C2Order();
+        // EOrder();
+        // ENOrder();
+        // A4Order();
+        // A4ECrossingOrder();
         // Encoder();
-        EHRelOrderTest(29);
+        EHRelOrderTest(1);
         // EHRelOrderConstruction();
     }
 
