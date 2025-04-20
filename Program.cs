@@ -6,6 +6,8 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        // EHatGliderRelativeOrder.AnalyzeRelOrder(29);
+        // return;
         CleanUp();
         /*Classic();*/
         /*Random();*/
@@ -15,7 +17,7 @@ public class Program
         /*A4Order();*/
         /*A4ECrossingOrder();*/
         // Encoder();
-        EHRelOrderTest();
+        EHRelOrderTest(29);
         // EHRelOrderConstruction();
     }
 
@@ -79,7 +81,7 @@ public class Program
         }
     }
 
-    public static void EHRelOrderTest()
+    public static void EHRelOrderTest(int initialGlider)
     {
         var ehGliderCollection = new EHatGliderCollection();
         var c2GliderCollection = new C2GliderCollection();
@@ -101,12 +103,12 @@ public class Program
             var offset = 5;
             var alignment = 0;
 
-            var alignDelta = EHatGlider.RightAlignment(0);
-            gliders.Add((offset, ehGliderCollection.Get(0)));
+            var alignDelta = EHatGlider.RightAlignment(initialGlider);
+            gliders.Add((offset, ehGliderCollection.Get(initialGlider)));
             offset += alignDelta;
             alignment += alignDelta;
 
-            var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(0, i + 1, 1);
+            var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(initialGlider, i / 8 + 1, i % 8);
             offset += ehOffset;
 
             alignDelta = EHatGlider.RightAlignment(ehNumber);
