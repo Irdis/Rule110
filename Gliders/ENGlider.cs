@@ -8,6 +8,8 @@ public class ENGlider : IGlider
 
     public static int[] Suffix { get; set; } = [ 4, 12, 8 ];
 
+    public static int Size { get; } = 15;
+
     public int EtherEnter { get; set; }
     public int EtherLeave { get; } = 4;
     public int[] Pattern { get;  set; }

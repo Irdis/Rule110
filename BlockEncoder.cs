@@ -62,6 +62,7 @@ public class BlockEncoder
                 BlockType.J => EncodeJ,
                 BlockType.K => EncodeK,
                 BlockType.L => EncodeL,
+                _ => throw new ArgumentOutOfRangeException("How about not")
             };
             for (int i = 0; i < block.Count; i++)
             {
