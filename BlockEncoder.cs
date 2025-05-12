@@ -128,7 +128,7 @@ public class BlockEncoder
 
     private void EncodeD(List<(int, IGlider)> gliders)
     {
-        var (ehOffset, ehNumber) = EHatGlider.Next(_ehGliderNumber, -12);
+        var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, 3, 0);
         _offset += ehOffset;
 
         var align = EHatGlider.RightAlignment(_ehGliderNumber);
@@ -142,7 +142,7 @@ public class BlockEncoder
     {
         for (int i = 0; i < 3; i++)
         {
-            var (ehOffset, ehNumber) = EHatGlider.Next(_ehGliderNumber, -60);
+            var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, 27, 0);
             _offset += ehOffset;
 
             var align = EHatGlider.RightAlignment(_ehGliderNumber);
@@ -155,10 +155,10 @@ public class BlockEncoder
 
     private void EncodeF(List<(int, IGlider)> gliders)
     {
-        int[] gaps = [-60, -48, -60];
+        int[] gaps = [27, 21, 27];
         for (int i = 0; i < 3; i++)
         {
-            var (ehOffset, ehNumber) = EHatGlider.Next(_ehGliderNumber, gaps[i]);
+            var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, gaps[i], 0);
             _offset += ehOffset;
 
             var align = EHatGlider.RightAlignment(_ehGliderNumber);

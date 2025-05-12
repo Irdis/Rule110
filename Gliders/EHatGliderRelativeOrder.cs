@@ -10,12 +10,14 @@ public class EHatGliderRelativeOrder
         -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 
         0, 0, 0, 0, 0, 0, 0, 1, 0, 0
     ];
-    private static int[] _initialNumberOfTriangles = [1, 2, 3, 3, 1, 1, 2, 1];
+    public static int[] InitialNumberOfTriangles { get; } = [1, 2, 3, 3, 1, 1, 2, 1];
     private const int TYPE_COUNT = 8;
 
     public static (int, int) Next(int gliderNumber, int ethCount, int type)
     {
-        ethCount--;
+        ethCount -= InitialNumberOfTriangles[type];
+        if (ethCount < 0) 
+            throw new InvalidOperationException("Invalid number of ether triangles");
 
         var offset = 8 * (ethCount / EHatGlider.Size);
 

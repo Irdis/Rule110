@@ -16,7 +16,6 @@ public class Program
         // A4ECrossingOrder();
         // Encoder();
         EHRelOrderTest(1);
-        // EHRelOrderConstruction();
     }
 
     private static void CleanUp()
@@ -28,15 +27,41 @@ public class Program
         }
     }
 
-    public static void EHRelOrderConstruction()
+    public static void Encoder()
     {
+        string[] patterns = [
+            "BCDFFFF",
+            "BCFGL",
+            "B 13A B 11A B 12A B C E G",
+            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
+            "B 13A B 11A B 12A B C F G",
+        ];
+        var a4GliderCollection = new ANGliderCollection(3);
         var ehGliderCollection = new EHatGliderCollection();
-        var c2GliderCollection = new C2GliderCollection();
+        var en1GliderCollection = new ENGliderCollection(0);
+        var en2GliderCollection = new ENGliderCollection(1);
+        var en4GliderCollection = new ENGliderCollection(3);
+        var en5GliderCollection = new ENGliderCollection(4);
 
-        for (int i = 0; i < EHatGlider.Size; i++)
+        for (int i = 0; i < patterns.Length; i++)
+        /*for (int i = 0; i < 30; i++)*/
         {
-            const int width = 500;
-            const int height = 500;
+            var pattern = patterns[i];
+            /*var pattern = patterns[0];*/
+            var encoder = new BlockEncoder(
+                a4GliderCollection,
+                ehGliderCollection,
+                en1GliderCollection,
+                en2GliderCollection,
+                en4GliderCollection,
+                en5GliderCollection,
+                i
+            );
+
+            /*const int width = 1500;*/
+            /*const int height = 1000;*/
+            const int width = 5000;
+            const int height = 5000;
 
             var background = new EtherBackground();
             var imgName = $"img_{i}.bmp";
@@ -47,30 +72,13 @@ public class Program
 
             var scene = new Scene(width, background, observers);
             var gliders = new List<(int, IGlider)>();
-            var offset = 5;
-            var alignment = 0;
-
-            var alignDelta = EHatGlider.RightAlignment(0);
-            gliders.Add((offset, ehGliderCollection.Get(0)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            var (ehOffset, ehNumber) = (1, i);
-            offset += ehOffset;
-
-            alignDelta = EHatGlider.RightAlignment(ehNumber);
-            gliders.Add((offset, ehGliderCollection.Get(ehNumber)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            offset = 40 + alignDelta;
-
-            gliders.Add((offset, c2GliderCollection.Get(0)));
-            offset += alignDelta;
-            alignment += alignDelta;
+            var blocks = BlockEncoder.Parse(pattern);
+            encoder.Encode(blocks, gliders);
 
             scene.Init(gliders);
+
             scene.InitComplete();
+
             for (int j = 1; j < height; j++)
             {
                 scene.Next();
@@ -106,7 +114,8 @@ public class Program
             offset += alignDelta;
             alignment += alignDelta;
 
-            var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(initialGlider, i / 8 + 1, i % 8);
+            var initialTriangleCount = EHatGliderRelativeOrder.InitialNumberOfTriangles[i % 8];
+            var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(initialGlider, i / 8 + initialTriangleCount, i % 8);
             offset += ehOffset;
 
             alignDelta = EHatGlider.RightAlignment(ehNumber);
@@ -130,64 +139,6 @@ public class Program
         }
     }
 
-    public static void Encoder()
-    {
-        string[] patterns = [
-            "BCFGL",
-            "B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B C F G",
-        ];
-        var a4GliderCollection = new ANGliderCollection(3);
-        var ehGliderCollection = new EHatGliderCollection();
-        var en1GliderCollection = new ENGliderCollection(0);
-        var en2GliderCollection = new ENGliderCollection(1);
-        var en4GliderCollection = new ENGliderCollection(3);
-        var en5GliderCollection = new ENGliderCollection(4);
-
-        for (int i = 0; i < patterns.Length; i++)
-        /*for (int i = 0; i < 30; i++)*/
-        {
-            var pattern = patterns[i];
-            /*var pattern = patterns[0];*/
-            var encoder = new BlockEncoder(
-                    a4GliderCollection,
-                    ehGliderCollection,
-                    en1GliderCollection,
-                    en2GliderCollection,
-                    en4GliderCollection,
-                    en5GliderCollection,
-                    i
-            );
-
-            /*const int width = 1500;*/
-            /*const int height = 1000;*/
-            const int width = 5000;
-            const int height = 5000;
-
-            var background = new EtherBackground();
-            var imgName = $"img_{i}.bmp";
-            var observers = new List<IObserver>
-            {
-                new ImgObserver(width, height, imgName),
-            };
-
-            var scene = new Scene(width, background, observers);
-            var gliders = new List<(int, IGlider)>();
-            var blocks = BlockEncoder.Parse(pattern);
-            encoder.Encode(blocks, gliders);
-
-            scene.Init(gliders);
-
-            scene.InitComplete();
-
-            for (int j = 1; j < height; j++)
-            {
-                scene.Next();
-            }
-            scene.Complete();
-        }
-    }
 
     public static void ENOrder()
     {
