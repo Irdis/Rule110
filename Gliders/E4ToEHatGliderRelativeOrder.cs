@@ -12,8 +12,8 @@ public class E4ToEHatGliderRelativeOrder
 
     public static (int, int) Next(int e4GliderNumber, int type)
     {
-        var delta = type == 1 ? 15 : 0;
-        var nextEHGliderNumber = (e4GliderNumber + 8 + delta) % EHatGlider.Size;
+        var period = type == 1 ? 15 : 0;
+        var nextEHGliderNumber = (e4GliderNumber + 8 + period) % EHatGlider.Size;
         var offset = _offset[nextEHGliderNumber];
         return (2 + offset, nextEHGliderNumber);
     }
