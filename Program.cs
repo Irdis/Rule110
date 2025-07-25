@@ -203,13 +203,13 @@ public class Program
         var ehGliderCollection = new EHatGliderCollection();
         var c2GliderCollection = new C2GliderCollection();
 
-        for (int i = 0; i < ENGlider.Size; i++)
+        for (int k = 0; k < 2 * ENGlider.Size; k++)
         {
             const int width = 500;
             const int height = 500;
 
             var background = new EtherBackground();
-            var imgName = $"img_{i}.bmp";
+            var imgName = $"img_{k}.bmp";
             var observers = new List<IObserver>
             {
                 new ImgObserver(width, height, imgName),
@@ -219,14 +219,14 @@ public class Program
             var gliders = new List<(int, IGlider)>();
             var offset = 5;
             var alignment = 0;
-            var initialGlider = i;
+            var initialGlider = k / 2;
 
             var alignDelta = ENGlider.RightAlignment(initialGlider, e4GliderType);
             gliders.Add((offset, e4GliderCollection.Get(initialGlider)));
             offset += alignDelta;
             alignment += alignDelta;
 
-            var (ehOffset, ehNumber) = E4ToEHatGliderRelativeOrder.Next(initialGlider, 0);
+            var (ehOffset, ehNumber) = E4ToEHatGliderRelativeOrder.Next(initialGlider, k % 2);
             offset += ehOffset;
 
             alignDelta = EHatGlider.RightAlignment(ehNumber);

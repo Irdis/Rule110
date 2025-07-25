@@ -6,14 +6,15 @@ public class E4ToEHatGliderRelativeOrder
 {
     private static int[] _offset = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        0, 0, 0, 0, 0, 0, 0, -1, 0, 0,
+        0, 0, 0, 0, 1, 0, 0, 0, 1, 0
     ];
 
     public static (int, int) Next(int e4GliderNumber, int type)
     {
-        var offset = _offset[e4GliderNumber];
-        var nextEHGliderNumber = e4GliderNumber % ENGlider.Size;
+        var delta = type == 1 ? 15 : 0;
+        var nextEHGliderNumber = (e4GliderNumber + 8 + delta) % EHatGlider.Size;
+        var offset = _offset[nextEHGliderNumber];
         return (2 + offset, nextEHGliderNumber);
     }
 }
