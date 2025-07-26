@@ -14,7 +14,8 @@ public class Program
         // ENOrder();
         // A4Order();
         // A4ECrossingOrder();
-        // Encoder();
+        // EncoderSmall();
+        EncoderBig();
         // EHRelOrderTest(1);
         // EHToE1RelOrderTest();
         // E1ToE4RelOrderTest();
@@ -22,7 +23,7 @@ public class Program
         // E5ToE2RelOrderTest();
         // E2ToE4KRelOrderTest();
         // E2ToE4LRelOrderTest();
-        E4ToEHLRelOrderTest();
+        // E4ToEHLRelOrderTest();
     }
 
     private static void CleanUp()
@@ -34,14 +35,11 @@ public class Program
         }
     }
 
-    public static void Encoder()
+    public static void EncoderSmall()
     {
         string[] patterns = [
+            "BCFGG",
             "BCDFFFF",
-            "BCFGL",
-            "B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B C F G",
         ];
         var a4GliderCollection = new ANGliderCollection(3);
         var ehGliderCollection = new EHatGliderCollection();
@@ -65,8 +63,60 @@ public class Program
                 i
             );
 
-            /*const int width = 1500;*/
-            /*const int height = 1000;*/
+            const int width = 1500;
+            const int height = 1000;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+            var gliders = new List<(int, IGlider)>();
+            var blocks = BlockEncoder.Parse(pattern);
+            encoder.Encode(blocks, gliders);
+
+            scene.Init(gliders);
+
+            scene.InitComplete();
+
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
+        }
+    }
+
+    public static void EncoderBig()
+    {
+        string[] patterns = [
+            "B 13A B 11A B 12A B C E G",
+            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
+            "B 13A B 11A B 12A B C F G",
+        ];
+        var a4GliderCollection = new ANGliderCollection(3);
+        var ehGliderCollection = new EHatGliderCollection();
+        var en1GliderCollection = new ENGliderCollection(0);
+        var en2GliderCollection = new ENGliderCollection(1);
+        var en4GliderCollection = new ENGliderCollection(3);
+        var en5GliderCollection = new ENGliderCollection(4);
+
+        for (int i = 0; i < patterns.Length; i++)
+        {
+            var pattern = patterns[i];
+            var encoder = new BlockEncoder(
+                a4GliderCollection,
+                ehGliderCollection,
+                en1GliderCollection,
+                en2GliderCollection,
+                en4GliderCollection,
+                en5GliderCollection,
+                i
+            );
+
             const int width = 5000;
             const int height = 5000;
 
@@ -891,11 +941,11 @@ public class Program
 
     private static void Classic()
     {
-        const int size = 100;
+        const int size = 1000;
         var background = new EmptyBackground();
         var observers = new List<IObserver>
         {
-            new ImgObserver(size, $"img_classic.bmp"),
+            new ImgObserver(size, $"img_0.bmp"),
             new ConsoleObserver(size, 100),
         };
         var scene = new Scene(size, background, observers);
@@ -916,27 +966,30 @@ public class Program
     {
         var random = new Random();
         const int size = 1000;
-        var background = new EmptyBackground();
-        var observers = new List<IObserver>
+        for (int i = 0; i < 10; i++)
         {
-            new ImgObserver(size, $"img_random.bmp"),
-        };
-        var scene = new Scene(size, background, observers);
+            var background = new EmptyBackground();
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(size, $"img_{i}.bmp"),
+            };
+            var scene = new Scene(size, background, observers);
 
-        var gliders = new List<(int, IGlider)>();
-        scene.Init(gliders);
+            var gliders = new List<(int, IGlider)>();
+            scene.Init(gliders);
 
-        for(int i = 0; i < size; i++)
-        {
-            scene.SetState(i, random.Next(2));
+            for(int j = 0; j < size; j++)
+            {
+                scene.SetState(j, random.Next(2));
+            }
+
+            scene.InitComplete();
+
+            for (int j = 1; j < scene.Size; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
         }
-
-        scene.InitComplete();
-
-        for (int j = 1; j < scene.Size; j++)
-        {
-            scene.Next();
-        }
-        scene.Complete();
     }
 }

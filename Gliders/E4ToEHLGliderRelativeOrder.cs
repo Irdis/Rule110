@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Rule110.Gliders;
 
 public class E4ToEHLGliderRelativeOrder
