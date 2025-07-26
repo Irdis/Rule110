@@ -236,39 +236,39 @@ public class BlockEncoder
         ]);
     }
 
-    private void EncodeH(List<(int, IGlider)> gliders)
+    public void EncodeH(List<(int, IGlider)> gliders)
     {
-        AddEs(gliders, [
-            (6, 1),
-            (12, 1),
-            (13, 2),
-            (21, 2),
-            (24, 3),
-            (20, 2),
+        AddEsV2(gliders, [
+            (2, 7),
+            (5, 6),
+            (7, 4),
+            (2, 7),
+            (9, 4),
+            (10, 2),
         ]);
     }
 
-    private void EncodeI(List<(int, IGlider)> gliders)
+    public void EncodeI(List<(int, IGlider)> gliders)
     {
-        AddEs(gliders, [
-            (6, 1),
-            (18, 3),
-            (29, 1),
-            (7, 1),
-            (10, 3),
-            (6, 3),
+        AddEsV2(gliders, [
+            (2, 7),
+            (11, 6),
+            (1, 0),
+            (2, 7),
+            (9, 4),
+            (10, 2),
         ]);
     }
 
-    private void EncodeJ(List<(int, IGlider)> gliders)
+    public void EncodeJ(List<(int, IGlider)> gliders)
     {
-        AddEs(gliders, [
-            (0, 2),
-            (12, 3),
-            (23, 1),
-            (1, 1),
-            (4, 3),
-            (0, 3),
+        AddEsV2(gliders, [
+            (8, 7),
+            (11, 6),
+            (1, 0),
+            (2, 7),
+            (9, 4),
+            (10, 2),
         ]);
     }
 
@@ -356,7 +356,7 @@ public class BlockEncoder
         }
     }
 
-    private void AddEs(List<(int, IGlider)> gliders, (int, int)[] es)
+    private void AddEs1(List<(int, IGlider)> gliders, (int, int)[] es)
     {
         foreach (var (ehNumber, offset) in es)
         {
