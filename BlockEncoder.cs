@@ -239,7 +239,7 @@ public class BlockEncoder
         _alignment += align;
         _ehGliderNumber = ehNumber;
 
-        AddEsV2(gliders, [
+        AddEs(gliders, [
             (6, 5),
             (10, 4),
             (3, 4),
@@ -249,7 +249,7 @@ public class BlockEncoder
 
     public void EncodeH(List<(int, IGlider)> gliders)
     {
-        AddEsV2(gliders, [
+        AddEs(gliders, [
             (2, 7),
             (5, 6),
             (7, 4),
@@ -261,7 +261,7 @@ public class BlockEncoder
 
     public void EncodeI(List<(int, IGlider)> gliders)
     {
-        AddEsV2(gliders, [
+        AddEs(gliders, [
             (2, 7),
             (11, 6),
             (1, 0),
@@ -273,7 +273,7 @@ public class BlockEncoder
 
     public void EncodeJ(List<(int, IGlider)> gliders)
     {
-        AddEsV2(gliders, [
+        AddEs(gliders, [
             (8, 7),
             (11, 6),
             (1, 0),
@@ -321,7 +321,7 @@ public class BlockEncoder
         _alignment += align;
         _ehGliderNumber = ehNumber;
 
-        AddEsV2(gliders, [
+        AddEs(gliders, [
             (6, 5),
             (10, 4),
             (3, 4),
@@ -366,32 +366,19 @@ public class BlockEncoder
         _alignment += align;
         _ehGliderNumber = ehNumber;
 
-        AddEsV2(gliders, [
+        AddEs(gliders, [
             (1, 7),
             (4, 0),
         ]);    
     }
 
-    private void AddEsV2(List<(int, IGlider)> gliders, (int, int)[] es)
+    private void AddEs(List<(int, IGlider)> gliders, (int, int)[] es)
     {
         foreach (var (ethCount, type) in es)
         {
             var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, ethCount, type);
             _offset += ehOffset;
 
-            var align = EHatGlider.RightAlignment(ehNumber);
-            gliders.Add((_offset, _eh.Get(ehNumber)));
-            _offset += align;
-            _alignment += align;
-            _ehGliderNumber = ehNumber;
-        }
-    }
-
-    private void AddEs(List<(int, IGlider)> gliders, (int, int)[] es)
-    {
-        foreach (var (ehNumber, offset) in es)
-        {
-            _offset += offset;
             var align = EHatGlider.RightAlignment(ehNumber);
             gliders.Add((_offset, _eh.Get(ehNumber)));
             _offset += align;
