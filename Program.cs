@@ -139,6 +139,7 @@ public class Program
             var gliders = new List<(int, IGlider)>();
             encoder.InsertEHat(gliders, i, 5);
             encoder.EncodeG(gliders);
+            encoder.EncodeG(gliders);
 
             scene.Init(gliders);
 

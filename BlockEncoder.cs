@@ -24,6 +24,11 @@ public class BlockEncoder
 
     private int _alignment = 0;
     private int _offset = 5;
+    private static int[] GE4ToEHType = [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+    ];
 
     private object[] _args;
 
@@ -187,6 +192,8 @@ public class BlockEncoder
 
     public void EncodeG(List<(int, IGlider)> gliders)
     {
+        var e4ToEhType = GE4ToEHType[_ehGliderNumber];
+
         var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, 11, 2);
         _offset += ehOffset;
 
@@ -212,7 +219,7 @@ public class BlockEncoder
         _offset += align;
         _alignment += align;
 
-        (ehOffset, ehNumber) = E4ToEHGliderRelativeOrder.Next(e4Number, 0);
+        (ehOffset, ehNumber) = E4ToEHGliderRelativeOrder.Next(e4Number, e4ToEhType);
         _offset += ehOffset;
 
         align = EHatGlider.RightAlignment(ehNumber);
