@@ -15,8 +15,8 @@ public class Program
         // A4Order();
         // A4ECrossingOrder();
         // EncoderSmall();
-        // EncoderBig();
-        EncoderGBlock();
+        EncoderBig();
+        // EncoderGBlock();
         // EHRelOrderTest(1);
         // EHToE1RelOrderTest();
         // E1ToE4RelOrderTest();
