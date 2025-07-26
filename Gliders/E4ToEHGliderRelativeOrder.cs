@@ -2,7 +2,7 @@ using System.Text;
 
 namespace Rule110.Gliders;
 
-public class E4ToEHatGliderRelativeOrder
+public class E4ToEHGliderRelativeOrder
 {
     private static int[] _offset = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
