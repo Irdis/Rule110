@@ -15,7 +15,8 @@ public class Program
         // A4Order();
         // A4ECrossingOrder();
         // EncoderSmall();
-        EncoderBig();
+        // EncoderBig();
+        EncoderGBlock();
         // EHRelOrderTest(1);
         // EHToE1RelOrderTest();
         // E1ToE4RelOrderTest();
@@ -41,27 +42,12 @@ public class Program
             "BCFGG",
             "BCDFFFF",
         ];
-        var a4GliderCollection = new ANGliderCollection(3);
-        var ehGliderCollection = new EHatGliderCollection();
-        var en1GliderCollection = new ENGliderCollection(0);
-        var en2GliderCollection = new ENGliderCollection(1);
-        var en4GliderCollection = new ENGliderCollection(3);
-        var en5GliderCollection = new ENGliderCollection(4);
+        var encoderFactory = new BlockEncoderFactory();
 
         for (int i = 0; i < patterns.Length; i++)
-        /*for (int i = 0; i < 30; i++)*/
         {
             var pattern = patterns[i];
-            /*var pattern = patterns[0];*/
-            var encoder = new BlockEncoder(
-                a4GliderCollection,
-                ehGliderCollection,
-                en1GliderCollection,
-                en2GliderCollection,
-                en4GliderCollection,
-                en5GliderCollection,
-                i
-            );
+            var encoder = encoderFactory.Create(i);
 
             const int width = 1500;
             const int height = 1000;
@@ -97,25 +83,12 @@ public class Program
             "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
             "B 13A B 11A B 12A B C F G",
         ];
-        var a4GliderCollection = new ANGliderCollection(3);
-        var ehGliderCollection = new EHatGliderCollection();
-        var en1GliderCollection = new ENGliderCollection(0);
-        var en2GliderCollection = new ENGliderCollection(1);
-        var en4GliderCollection = new ENGliderCollection(3);
-        var en5GliderCollection = new ENGliderCollection(4);
+        var encoderFactory = new BlockEncoderFactory();
 
         for (int i = 0; i < patterns.Length; i++)
         {
             var pattern = patterns[i];
-            var encoder = new BlockEncoder(
-                a4GliderCollection,
-                ehGliderCollection,
-                en1GliderCollection,
-                en2GliderCollection,
-                en4GliderCollection,
-                en5GliderCollection,
-                i
-            );
+            var encoder = encoderFactory.Create(i);
 
             const int width = 5000;
             const int height = 5000;
@@ -131,6 +104,41 @@ public class Program
             var gliders = new List<(int, IGlider)>();
             var blocks = BlockEncoder.Parse(pattern);
             encoder.Encode(blocks, gliders);
+
+            scene.Init(gliders);
+
+            scene.InitComplete();
+
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
+        }
+    }
+
+    public static void EncoderGBlock()
+    {
+        var encoderFactory = new BlockEncoderFactory();
+
+        for (int i = 0; i < EHatGlider.Size; i++)
+        {
+            var encoder = encoderFactory.Create(i);
+
+            const int width = 1500;
+            const int height = 1000;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+            var gliders = new List<(int, IGlider)>();
+            encoder.InsertEHat(gliders, i, 5);
+            encoder.EncodeG(gliders);
 
             scene.Init(gliders);
 

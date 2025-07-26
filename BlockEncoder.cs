@@ -75,6 +75,17 @@ public class BlockEncoder
         }
     }
 
+    public void InsertEHat(List<(int, IGlider)> gliders, int ehNumber, int ehOffset)
+    {
+        _offset = ehOffset;
+        _ehGliderNumber = ehNumber;
+
+        var alignDelta = EHatGlider.RightAlignment(ehNumber);
+        gliders.Add((_offset, _eh.Get(ehNumber)));
+        _offset += alignDelta;
+        _alignment += alignDelta;
+    }
+
     private int GetA4StartingNumber(List<BlockItem> blocks)
     {
         var bs = blocks
@@ -174,12 +185,12 @@ public class BlockEncoder
         }
     }
 
-    private void EncodeG(List<(int, IGlider)> gliders)
+    public void EncodeG(List<(int, IGlider)> gliders)
     {
         var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, 11, 2);
         _offset += ehOffset;
 
-        var align = EHatGlider.RightAlignment(_ehGliderNumber);
+        var align = EHatGlider.RightAlignment(ehNumber);
         gliders.Add((_offset, _eh.Get(ehNumber)));
         _offset += align;
         _alignment += align;
@@ -316,7 +327,6 @@ public class BlockEncoder
         _offset += align;
         _alignment += align;
 
-
         AddEs(gliders, [ 
             (21, 1),
             (28, 1),
@@ -331,7 +341,7 @@ public class BlockEncoder
             var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, ethCount, type);
             _offset += ehOffset;
 
-            var align = EHatGlider.RightAlignment(_ehGliderNumber);
+            var align = EHatGlider.RightAlignment(ehNumber);
             gliders.Add((_offset, _eh.Get(ehNumber)));
             _offset += align;
             _alignment += align;
