@@ -12,8 +12,9 @@ public class BlockEncoder
     private ENGliderCollection _en5;
 
     private const int e1GliderType = 0;
+    private const int e2GliderType = 1;
     private const int e4GliderType = 3;
-    private const int e5GliderType = 5;
+    private const int e5GliderType = 4;
 
     private int _a4GliderNumber = 2;
     private int _a4GliderDist;
@@ -28,6 +29,11 @@ public class BlockEncoder
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+    ];
+    private static int[] KE4ToEHType = [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
     ];
 
     private object[] _args;
@@ -272,39 +278,49 @@ public class BlockEncoder
         ]);
     }
 
-    private void EncodeK(List<(int, IGlider)> gliders)
+    public void EncodeK(List<(int, IGlider)> gliders)
     {
-        var e5Number = 4;
 
-        _offset += 1;
-        var align = ENGlider.RightAlignment(e5Number, _en5.N);
+        var e4ToEhType = KE4ToEHType[_ehGliderNumber];
+
+        var (e5Offset, e5Number) = EHatToE5GliderRelativeOrder.Next(_ehGliderNumber);
+        _offset += e5Offset;
+
+        var align = ENGlider.RightAlignment(e5Number, e5GliderType);
         gliders.Add((_offset, _en5.Get(e5Number)));
         _offset += align;
         _alignment += align;
 
-        var e2Number = 1;
+        var (e2Offset, e2Number) = E5ToE2GliderRelativeOrder.Next(e5Number);
+        _offset += e2Offset;
 
-        _offset += 1;
-        align = ENGlider.RightAlignment(e2Number, _en2.N);
+        align = ENGlider.RightAlignment(e2Number, e2GliderType);
         gliders.Add((_offset, _en2.Get(e2Number)));
         _offset += align;
         _alignment += align;
 
-        var e4Number = 4;
+        var (e4Offset, e4Number) = E2ToE4KGliderRelativeOrder.Next(e2Number);
+        _offset += e4Offset;
 
-        _offset += 4;
-        align = ENGlider.RightAlignment(e4Number, _en4.N);
+        align = ENGlider.RightAlignment(e4Number, e4GliderType);
         gliders.Add((_offset, _en4.Get(e4Number)));
         _offset += align;
         _alignment += align;
 
+        var (ehOffset, ehNumber) = E4ToEHGliderRelativeOrder.Next(e4Number, e4ToEhType);
+        _offset += ehOffset;
 
-        AddEs(gliders, [
-            (27, 2),
-            (1, 2),
-            (5, 3),
-            (2, 2),
-            (28, 3)
+        align = EHatGlider.RightAlignment(ehNumber);
+        gliders.Add((_offset, _eh.Get(ehNumber)));
+        _offset += align;
+        _alignment += align;
+        _ehGliderNumber = ehNumber;
+
+        AddEsV2(gliders, [
+            (6, 5),
+            (10, 4),
+            (3, 4),
+            (10, 2),
         ]);
     }
 
@@ -356,7 +372,7 @@ public class BlockEncoder
         }
     }
 
-    private void AddEs1(List<(int, IGlider)> gliders, (int, int)[] es)
+    private void AddEs(List<(int, IGlider)> gliders, (int, int)[] es)
     {
         foreach (var (ehNumber, offset) in es)
         {

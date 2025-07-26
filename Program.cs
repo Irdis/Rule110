@@ -19,7 +19,8 @@ public class Program
         // EncoderGBlock();
         // EncoderHBlock();
         // EncoderIBlock();
-        EncoderJBlock();
+        // EncoderJBlock();
+        EncoderKBlock();
         // EHRelOrderTest(1);
         // EHToE1RelOrderTest();
         // E1ToE4RelOrderTest();
@@ -251,6 +252,42 @@ public class Program
             encoder.InsertEHat(gliders, i, 5);
             encoder.EncodeJ(gliders);
             encoder.EncodeJ(gliders);
+
+            scene.Init(gliders);
+
+            scene.InitComplete();
+
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
+        }
+    }
+
+    public static void EncoderKBlock()
+    {
+        var encoderFactory = new BlockEncoderFactory();
+
+        for (int i = 0; i < EHatGlider.Size; i++)
+        {
+            var encoder = encoderFactory.Create(i);
+
+            const int width = 1500;
+            const int height = 1000;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+            var gliders = new List<(int, IGlider)>();
+            encoder.InsertEHat(gliders, i, 5);
+            encoder.EncodeK(gliders);
+            encoder.EncodeK(gliders);
 
             scene.Init(gliders);
 
