@@ -15,13 +15,14 @@ public class Program
         // A4Order();
         // A4ECrossingOrder();
         // EncoderSmall();
-        // EncoderBig();
+        EncoderBig();
+        // EncoderFBlock();
         // EncoderGBlock();
         // EncoderHBlock();
         // EncoderIBlock();
         // EncoderJBlock();
         // EncoderKBlock();
-        EncoderLBlock();
+        // EncoderLBlock();
         // EHRelOrderTest(1);
         // EHToE1RelOrderTest();
         // E1ToE4RelOrderTest();
@@ -84,6 +85,15 @@ public class Program
     public static void EncoderBig()
     {
         string[] patterns = [
+            "B 13A B 11A B 12A B 121A B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D F G) L",
+            // NY .. {YY, O}
+            // NY -> Y -> O 
+            "B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C E D F G) H I I I L K ",
+
+            // YN .. {YY, O}
+            // YN -> NYY -> YY
+            "B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L K ",
+
             "B 13A B 11A B 12A B C E G",
             "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
             "B 13A B 11A B 12A B C F G",
@@ -95,8 +105,8 @@ public class Program
             var pattern = patterns[i];
             var encoder = encoderFactory.Create(i);
 
-            const int width = 5000;
-            const int height = 5000;
+            const int width = 20000;
+            const int height = 20000;
 
             var background = new EtherBackground();
             var imgName = $"img_{i}.bmp";
@@ -109,6 +119,42 @@ public class Program
             var gliders = new List<(int, IGlider)>();
             var blocks = BlockEncoder.Parse(pattern);
             encoder.Encode(blocks, gliders);
+
+            scene.Init(gliders);
+
+            scene.InitComplete();
+
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
+        }
+    }
+
+    public static void EncoderFBlock()
+    {
+        var encoderFactory = new BlockEncoderFactory();
+
+        for (int i = 0; i < EHatGlider.Size; i++)
+        {
+            var encoder = encoderFactory.Create(i);
+
+            const int width = 1500;
+            const int height = 1000;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+            var gliders = new List<(int, IGlider)>();
+            encoder.InsertEHat(gliders, i, 5);
+            encoder.EncodeF(gliders);
+            encoder.EncodeF(gliders);
 
             scene.Init(gliders);
 

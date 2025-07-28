@@ -163,7 +163,7 @@ public class BlockEncoder
         var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, 3, 0);
         _offset += ehOffset;
 
-        var align = EHatGlider.RightAlignment(_ehGliderNumber);
+        var align = EHatGlider.RightAlignment(ehNumber);
         gliders.Add((_offset, _eh.Get(ehNumber)));
         _offset += align;
         _alignment += align;
@@ -177,7 +177,7 @@ public class BlockEncoder
             var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, 27, 0);
             _offset += ehOffset;
 
-            var align = EHatGlider.RightAlignment(_ehGliderNumber);
+            var align = EHatGlider.RightAlignment(ehNumber);
             gliders.Add((_offset, _eh.Get(ehNumber)));
             _offset += align;
             _alignment += align;
@@ -185,7 +185,7 @@ public class BlockEncoder
         }
     }
 
-    private void EncodeF(List<(int, IGlider)> gliders)
+    public void EncodeF(List<(int, IGlider)> gliders)
     {
         int[] gaps = [27, 21, 27];
         for (int i = 0; i < 3; i++)
@@ -193,7 +193,7 @@ public class BlockEncoder
             var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, gaps[i], 0);
             _offset += ehOffset;
 
-            var align = EHatGlider.RightAlignment(_ehGliderNumber);
+            var align = EHatGlider.RightAlignment(ehNumber);
             gliders.Add((_offset, _eh.Get(ehNumber)));
             _offset += align;
             _alignment += align;
@@ -398,7 +398,7 @@ public class BlockEncoder
         while (ind < str.Length)
         {
             var ch = str[ind];
-            if (ch == ' ')
+            if (!char.IsLetterOrDigit(ch))
             {
                 ind++;
                 continue;
