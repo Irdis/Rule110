@@ -110,7 +110,7 @@ public class BlockEncoder
         return _a4ToERelation[bs % 3];
     }
 
-    private void EncodeA(List<(int, IGlider)> gliders)
+    public void EncodeA(List<(int, IGlider)> gliders)
     {
         if (!_hasA4)
         {
@@ -119,7 +119,7 @@ public class BlockEncoder
         _a4GliderDist += -3 * 2;
     }
 
-    private void EncodeB(List<(int, IGlider)> gliders)
+    public void EncodeB(List<(int, IGlider)> gliders)
     {
         if (!_hasA4)
         {
@@ -158,7 +158,7 @@ public class BlockEncoder
         _alignment += align;
     }
 
-    private void EncodeD(List<(int, IGlider)> gliders)
+    public void EncodeD(List<(int, IGlider)> gliders)
     {
         var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(_ehGliderNumber, 3, 0);
         _offset += ehOffset;

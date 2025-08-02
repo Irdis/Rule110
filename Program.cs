@@ -16,6 +16,7 @@ public class Program
         // A4ECrossingOrder();
         // EncoderSmall();
         EncoderBig();
+        // EncoderBBlock();
         // EncoderFBlock();
         // EncoderGBlock();
         // EncoderHBlock();
@@ -39,6 +40,49 @@ public class Program
         foreach(var file in files)
         {
             File.Delete(file);
+        }
+    }
+
+    public static void EncoderBig()
+    {
+        string[] patterns = [
+            "B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L I K H I I I L I K",
+            "B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L I K ",
+            "B 13A B 11A B 12A B C E G",
+            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
+            "B 13A B 11A B 12A B C F G",
+        ];
+        var encoderFactory = new BlockEncoderFactory();
+
+        for (int i = 0; i < patterns.Length; i++)
+        {
+            var pattern = patterns[i];
+            var encoder = encoderFactory.Create(i);
+
+            const int width = 10000;
+            const int height = 10000;
+
+            var background = new EtherBackground();
+            var imgName = $"img_{i}.bmp";
+            var observers = new List<IObserver>
+            {
+                new ImgObserver(width, height, imgName),
+            };
+
+            var scene = new Scene(width, background, observers);
+            var gliders = new List<(int, IGlider)>();
+            var blocks = BlockEncoder.Parse(pattern);
+            encoder.Encode(blocks, gliders);
+
+            scene.Init(gliders);
+
+            scene.InitComplete();
+
+            for (int j = 1; j < height; j++)
+            {
+                scene.Next();
+            }
+            scene.Complete();
         }
     }
 
@@ -82,31 +126,16 @@ public class Program
         }
     }
 
-    public static void EncoderBig()
+    public static void EncoderBBlock()
     {
-        string[] patterns = [
-            "B 13A B 11A B 12A B 121A B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D F G) L",
-            // NY .. {YY, O}
-            // NY -> Y -> O 
-            "B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C E D F G) H I I I L K ",
-
-            // YN .. {YY, O}
-            // YN -> NYY -> YY
-            "B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L K ",
-
-            "B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B C F G",
-        ];
         var encoderFactory = new BlockEncoderFactory();
 
-        for (int i = 0; i < patterns.Length; i++)
+        for (int i = 0; i < EHatGlider.Size; i++)
         {
-            var pattern = patterns[i];
             var encoder = encoderFactory.Create(i);
 
-            const int width = 20000;
-            const int height = 20000;
+            const int width = 1500;
+            const int height = 1000;
 
             var background = new EtherBackground();
             var imgName = $"img_{i}.bmp";
@@ -117,8 +146,11 @@ public class Program
 
             var scene = new Scene(width, background, observers);
             var gliders = new List<(int, IGlider)>();
-            var blocks = BlockEncoder.Parse(pattern);
-            encoder.Encode(blocks, gliders);
+            encoder.InsertEHat(gliders, i, 5);
+            encoder.EncodeF(gliders);
+            encoder.EncodeF(gliders);
+            encoder.EncodeF(gliders);
+            encoder.EncodeF(gliders);
 
             scene.Init(gliders);
 
