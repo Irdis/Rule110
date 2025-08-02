@@ -6,6 +6,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        CleanUp("out");
         CleanUp();
         // Classic();
         // Random();
@@ -32,25 +33,43 @@ public class Program
         // E2ToE4KRelOrderTest();
         // E2ToE4LRelOrderTest();
         // E4ToEHLRelOrderTest();
+
+        CutR110Images();
     }
 
-    private static void CleanUp()
+    private static void CleanUp(string? folder = null)
     {
-        var files = Directory.GetFiles(".", "*.bmp");
+        folder ??= ".";
+        var files = Directory.GetFiles(folder, "*.bmp");
+        foreach(var file in files)
+        {
+            File.Delete(file);
+        }
+        files = Directory.GetFiles(folder, "*.r110");
         foreach(var file in files)
         {
             File.Delete(file);
         }
     }
 
+    public static void CutR110Images()
+    {
+        var cutter = new ImgCutter("img_0.r110");
+        cutter.CutImages("out/img_{0}.bmp", width: 10000, height: 20000,
+            frameX: 10000, 
+            frameY: 10000,
+            frameWidth: 10000,
+            frameHeight: 20000);
+    }
+
     public static void EncoderBig()
     {
         string[] patterns = [
-            "B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L I K H I I I L I K",
-            "B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L I K ",
-            "B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
-            "B 13A B 11A B 12A B C F G",
+            "B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L K H I I I L K",
+            // "B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L I K ",
+            // "B 13A B 11A B 12A B C E G",
+            // "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
+            // "B 13A B 11A B 12A B C F G",
         ];
         var encoderFactory = new BlockEncoderFactory();
 
@@ -59,14 +78,16 @@ public class Program
             var pattern = patterns[i];
             var encoder = encoderFactory.Create(i);
 
-            const int width = 10000;
-            const int height = 10000;
+            const int width = 30000;
+            const int height = 30000;
 
             var background = new EtherBackground();
-            var imgName = $"img_{i}.bmp";
+            // var imgName = $"img_{i}.bmp";
+            var r110Name = $"img_{i}.r110";
             var observers = new List<IObserver>
             {
-                new ImgObserver(width, height, imgName),
+                // new ImgObserver(width, height, imgName),
+                new FileObserver(width, height, r110Name),
             };
 
             var scene = new Scene(width, background, observers);
