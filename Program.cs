@@ -56,20 +56,23 @@ public class Program
     {
         var cutter = new ImgCutter("img_0.r110");
         cutter.CutImages("out/img_{0}.bmp", width: 10000, height: 20000,
-            frameX: 10000, 
-            frameY: 10000,
+            frameX: 15000, 
+            // frameY: 10000,
             frameWidth: 10000,
-            frameHeight: 20000);
+            frameHeight: 30000);
     }
 
     public static void EncoderBig()
     {
         string[] patterns = [
-            "B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 120A B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L K H I I I L K",
-            // "B 13A B 11A B 12A B 76A B 13A B 11A B 12A B (C F D E G) H I I I L I K ",
-            // "B 13A B 11A B 12A B C E G",
-            // "B 13A B 11A B 12A B 12A B 13A B 11A B 12A B C E G",
-            // "B 13A B 11A B 12A B C F G",
+            @"
+                B 13A B 11A B 12A B 336A 
+                B 13A B 11A B 12A B 336A  
+                B 13A B 11A B 12A B 
+                (C E D F G) 
+                H J I I I I I I I I I I K 
+                H J I I I I I I I I I I K 
+            ",
         ];
         var encoderFactory = new BlockEncoderFactory();
 

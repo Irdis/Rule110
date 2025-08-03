@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 *.bmp
-tags
+*.r110
 
 # User-specific files
 *.suo
