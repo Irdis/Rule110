@@ -42,7 +42,7 @@ public class ImgCutter
     // |                 ---------------------               |
     // |                              width                  |
     // -------------------------------------------------------
-    // 
+    //
     // Vars:
     // CroppedHeight
     // |                                                     |
@@ -52,17 +52,17 @@ public class ImgCutter
     // |                           v |           | |         |
     // -------------------------------------------------------
     //                               |           | | height
-    //                               |           | v 
+    //                               |           | v
     //                               -------------
     public void CutImages(
         string pathTemplate,
-        int width, 
+        int width,
         int height,
         int frameX = 0,
         int frameY = 0,
         int frameWidth = -1,
         int frameHeight = -1,
-        bool pad = true
+        bool pad = false
     )
     {
         using var fs = File.OpenRead(_scenePath);
@@ -70,6 +70,12 @@ public class ImgCutter
 
         var totalWidth = br.ReadInt32();
         var totalHeight = br.ReadInt32();
+        if (frameX >= totalWidth)
+            throw new ArgumentOutOfRangeException(nameof(frameX), frameX,
+                $"FrameX is too big total width {totalWidth}");
+        if (frameY >= totalHeight)
+            throw new ArgumentOutOfRangeException(nameof(frameY), frameY,
+                $"FrameY is too big total height {totalHeight}");
 
         if (frameWidth == -1)
             frameWidth = totalWidth - frameX;
@@ -90,7 +96,7 @@ public class ImgCutter
         var croppedFrameWidth = Math.Min(frameWidth, totalWidth - frameX);
 
         int[] buf = new int[width];
-        int rowTotalWidthBytes = DivCeil(totalWidth, 8);
+        int rowWidthBytes = DivCeil(totalWidth, 8);
         int skipColBytes = DivFloor(frameX, 8);
 
         for (int rowInd = 0; rowInd < rows; rowInd++)
@@ -108,19 +114,19 @@ public class ImgCutter
 
             for (int i = 0; i < (lastRow ? lastCroppedHeight : height); i++)
             {
-                MoveStreamToBegin(fs, 
+                MoveStreamToBegin(fs,
                     frameY + rowInd * height + i,
-                    rowTotalWidthBytes,
+                    rowWidthBytes,
                     skipColBytes);
 
                 int curByte = br.ReadByte();
                 for (int j = 0; j < croppedFrameWidth; j++)
                 {
                     var bufInd = j % width;
-                    var bitInd = frameX + j;
+                    var bitInd = (frameX + j) % 8;
                     var colInd = j / width;
 
-                    buf[bufInd] = (curByte & _mask[bitInd % 8]) == 0
+                    buf[bufInd] = (curByte & _mask[bitInd]) == 0
                         ? 0 : 1;
 
                     var lastCol = colInd == cols - 1;
@@ -133,6 +139,11 @@ public class ImgCutter
                             lastCol,
                             pad);
                     }
+                    var isLastBitInCurrentByte = bitInd == 7;
+                    if (isLastBitInCurrentByte)
+                    {
+                        curByte = br.ReadByte();
+                    }
                 }
             }
             if (pad && lastRow && height != lastCroppedHeight)
@@ -142,7 +153,7 @@ public class ImgCutter
                 for (int colInd = 0; colInd < imgs.Length; colInd++)
                 for (int i = lastCroppedHeight; i < height; i++)
                 {
-                    WriteCurrentBuf(imgs[colInd], 
+                    WriteCurrentBuf(imgs[colInd],
                         buf,
                         width,
                         lastCroppedWidth,
@@ -169,11 +180,11 @@ public class ImgCutter
             img.WriteRow(buf);
             return;
         }
-        
+
         if (!pad || lastCroppedWidth == width)
         {
             img.WriteRow(buf, lastCroppedWidth);
-        } 
+        }
         else
         {
             Array.Fill(buf, 0, lastCroppedWidth, width - lastCroppedWidth);
@@ -191,15 +202,15 @@ public class ImgCutter
         return col == width - 1;
     }
 
-    private void MoveStreamToBegin(FileStream fs, 
-        int curFrameY, 
-        int rowTotalWidthBytes,
+    private void MoveStreamToBegin(FileStream fs,
+        int curY,
+        int rowWidthBytes,
         int skipColBytes)
     {
-        const int headerBytes = 2;
-        fs.Seek(headerBytes + 
-            curFrameY * rowTotalWidthBytes + 
-            skipColBytes, 
+        const int headerBytes = 8;
+        fs.Seek(headerBytes +
+            curY * rowWidthBytes +
+            skipColBytes,
             SeekOrigin.Begin);
     }
 
@@ -211,17 +222,17 @@ public class ImgCutter
         }
     }
 
-    private void CreateImgs(ImgBmp[] imgs, 
+    private void CreateImgs(ImgBmp[] imgs,
         string pathTemplate,
-        int row, 
-        int width, 
+        int row,
+        int width,
         int lastWidth,
         int height)
     {
         for (int i = 0; i < imgs.Length; i++)
         {
             var fileName = string.Format(pathTemplate, $"{row}x{i}");
-            var curWidth = i != imgs.Length - 1 
+            var curWidth = i != imgs.Length - 1
                 ? width
                 : lastWidth;
             imgs[i] = new ImgBmp(fileName, curWidth, height);

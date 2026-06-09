@@ -30,7 +30,7 @@ public class FileObserver : IObserver
         _fs = new FileStream(filePath, new FileStreamOptions {
             Mode = FileMode.Create,
             Access = FileAccess.Write,
-            PreallocationSize = GetInBytes(width) * height + 8
+            PreallocationSize = DivCeil(width, 8) * height + 8
         });
         _bw = new BinaryWriter(_fs);
 
@@ -38,11 +38,9 @@ public class FileObserver : IObserver
         _bw.Write(height);
     }
 
-    private int GetInBytes(int width) => width / 8 + (width % 8 != 0 ? 1 : 0);
-
     public void Next(int lvl, int[] tape)
     {
-        var bytesTotal = GetInBytes(_width);
+        var bytesTotal = DivCeil(_width, 8);
         for (int i = 0; i < bytesTotal; i++)
         {
             byte b = 0;
@@ -60,4 +58,6 @@ public class FileObserver : IObserver
         _fs.Dispose();
         _bw.Dispose();
     }
+
+    private static int DivCeil(int n, int i) => n / i + (n % i != 0 ? 1 : 0);
 }

@@ -8,6 +8,7 @@ public class Program
     {
         CleanUp("out");
         CleanUp();
+
         // Classic();
         // Random();
         // C2Order();
@@ -56,7 +57,7 @@ public class Program
     {
         var cutter = new ImgCutter("img_0.r110");
         cutter.CutImages("out/img_{0}.bmp", width: 10000, height: 20000,
-            frameX: 15000, 
+            frameX: 15000,
             // frameY: 10000,
             frameWidth: 10000,
             frameHeight: 30000);
@@ -66,12 +67,12 @@ public class Program
     {
         string[] patterns = [
             @"
-                B 13A B 11A B 12A B 336A 
-                B 13A B 11A B 12A B 336A  
-                B 13A B 11A B 12A B 
-                (C E D F G) 
-                H J I I I I I I I I I I K 
-                H J I I I I I I I I I I K 
+                B 13A B 11A B 12A B 336A
+                B 13A B 11A B 12A B 336A
+                B 13A B 11A B 12A B
+                (C E D F G)
+                H J I I I I I I I I I I K
+                H J I I I I I I I I I I K
             ",
         ];
         var encoderFactory = new BlockEncoderFactory();
@@ -1009,7 +1010,7 @@ public class Program
             var scene = new Scene(width, background, observers);
 
             var gliders = new List<(int, IGlider)>();
-            
+
             var (offset1, gliderIndex1) = ANGlider.NextA(aInd, -3);
             var align1 = ANGlider.RightAlignment(gliderIndex1);
 
@@ -1090,7 +1091,7 @@ public class Program
             var gliders = new List<(int, IGlider)>();
 
             var offsetATotal = 0;
-            
+
             var (offset3, gliderIndex3) = ANGlider.Next(aInd, -1);
             var align3 = ANGlider.RightAlignment(gliderIndex3);
             offsetATotal += offset3;
@@ -1237,12 +1238,14 @@ public class Program
 
     private static void Classic()
     {
-        const int size = 1000;
+        const int size = 100;
+        var r110Name = $"img_0.r110";
         var background = new EmptyBackground();
         var observers = new List<IObserver>
         {
             new ImgObserver(size, $"img_0.bmp"),
-            new ConsoleObserver(size, 100),
+            new FileObserver(size, size, r110Name),
+            // new ConsoleObserver(size, 100),
         };
         var scene = new Scene(size, background, observers);
 
