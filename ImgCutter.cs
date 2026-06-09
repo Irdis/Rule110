@@ -22,7 +22,7 @@ public class ImgCutter
 
     // Layout:
     // ----------------------
-    // | width: 8, height: 8|
+    // | width: 4, height: 4|
     // ----------------------
     // |        data        |
     // ----------------------
