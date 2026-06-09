@@ -59,11 +59,14 @@ public class ImgBmp : IDisposable
         _binary.Write((byte)0x00);
     }
 
-    public void WriteRow(int[] pixels)
+    public void WriteRow(int[] pixels, int pixelsLength = -1)
     {
+        pixelsLength = pixelsLength == -1 
+            ? pixels.Length 
+            : pixelsLength;
         for (int k = 0; k < _bitsPerBlock; k++)
         {
-            var len = pixels.Length * _bitsPerBlock;
+            var len = pixelsLength * _bitsPerBlock;
             byte b = 0;
             for (int i = 0; i < len; i++)
             {
