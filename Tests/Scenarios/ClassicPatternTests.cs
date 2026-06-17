@@ -5,11 +5,11 @@ namespace Rule110.Tests.Scenarios;
 [Tag("classic")]
 public class ClassicPattern : Rule110TestBase
 {
-    [TestCase(1, "small")]
-    public void GenerateClassicPattern(int prefNum, string prefSuff)
+    [TestCase(1, "small", 10)]
+    [TestCase(1, "normal", 100)]
+    [TestCase(1, "big", 1000)]
+    public void GenerateClassicPattern(int prefNum, string prefSuff, int size)
     {
-        const int size = 100;
-
         var actualImgName = GetImgActualPath(prefNum, prefSuff);
         var baselineImgName = GetImgBaselinePath(prefNum, prefSuff);
         SetupFolders(actualImgName, baselineImgName);
