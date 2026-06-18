@@ -4,22 +4,44 @@ namespace Rule110.Tests;
 
 public class Rule110TestBase
 {
-    protected string GetSuffix(int prefNum, string prefStr) => 
-        $"{FormatNumber(prefNum)}_{prefStr}";
+    [SetUp]
+    public void Setup()
+    {
+        SetupFolders();
+    }
 
-    protected string GetImageName(int prefNum, string prefStr, int suffStr) => 
-        GetImageName(prefNum, prefStr, FormatNumber(suffStr));
+    protected string GetSuffix(int prefNum,
+        string prefStr
+    ) => $"{FormatNumber(prefNum)}_{prefStr}";
 
-    protected string GetImageName(int prefNum, string prefStr, string suffStr = null) => 
-        $"{GetSuffix(prefNum, prefStr)}{(suffStr == null ? null : "_" + suffStr)}.bmp";
+    protected string GetImageName(int prefNum,
+        string prefStr,
+        int suffStr
+    ) => GetImageName(prefNum, prefStr, FormatNumber(suffStr));
 
-    private string FormatNumber(int number) => number.ToString("D2");
+    protected string GetImageName(int prefNum,
+        string prefStr,
+        string suffStr = null
+    ) => $"{GetSuffix(prefNum, prefStr)}{(suffStr == null ? null : "_" + suffStr)}.bmp";
 
-    protected string GetImgBaselinePath(int prefNum, string prefStr) =>
-        GetImagePath(OutputType.Baseline, GetImageName(prefNum, prefStr));
+    protected string FormatNumber(int number) => number.ToString("D2");
 
-    protected string GetImgActualPath(int prefNum, string prefStr) =>
-        GetImagePath(OutputType.Actual, GetImageName(prefNum, prefStr));
+    protected string GetImgBaselinePath(int prefNum,
+        string prefStr,
+        string suffStr = null
+    ) => GetImagePath(OutputType.Baseline, GetImageName(prefNum, prefStr, suffStr));
+
+    protected string GetImgActualPath(int prefNum,
+        string prefStr,
+        string suffStr = null
+    ) => GetImagePath(OutputType.Actual, GetImageName(prefNum, prefStr, suffStr));
+
+    protected string GetImgActualFolder() => GetImageFolder(OutputType.Actual);
+
+    protected string GetImgBaselineFolder() => GetImageFolder(OutputType.Baseline);
+
+    protected string GetImageFolder(OutputType type) => 
+        Path.Combine("Tests", type.ToString(), GetTagName());
 
     protected string GetImagePath(OutputType type, string imageName) => 
         Path.Combine("Tests", type.ToString(), GetTagName(), imageName);
@@ -87,13 +109,19 @@ public class Rule110TestBase
         "expectedFile: " + expectedPath + Environment.NewLine +
         "actualFile: " + actualPath;
 
-    protected void SetupFolders(params string[] fileNames) 
+    protected void SetupActualFolders() => 
+        SetupFolders(actual: true, baseline: false);
+
+    protected void SetupBaselineFolders() => 
+        SetupFolders(actual: false, baseline: true);
+
+    protected void SetupFolders(bool actual = true, bool baseline = true) 
     {
-        for (int i = 0; i < fileNames.Length; i++)
-        {
-            var fileName = fileNames[i];
-            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-        }
+        if (baseline)
+            Directory.CreateDirectory(GetImgBaselineFolder());
+
+        if (actual)
+            Directory.CreateDirectory(GetImgActualFolder());
     }
 
     private string GetTagName()

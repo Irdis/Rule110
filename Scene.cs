@@ -2,13 +2,14 @@ namespace Rule110;
 
 public class Scene
 {
-    private static int[] _table = Construct();
+    private int[] _table;
 
     private int _size;
     private int[] _tape;
     private int[] _tmp;
     private int _row = 0;
     private bool _initialized = false;
+    private int _ruleNumber;
 
     private IBackground _background;
     private List<IObserver> _observers;
@@ -16,13 +17,19 @@ public class Scene
     public int Size => _size;
     public int[] Tape => _tape;
 
-    public Scene(int size, IBackground background, List<IObserver>? observers = null)
+    public Scene(int size,
+        IBackground background,
+        List<IObserver>? observers = null,
+        int ruleNumber = 110)
     {
+        _ruleNumber = ruleNumber;
         _size = size;
         _tape = new int[_size];
         _tmp = new int[_size];
         _background = background;
         _observers = observers ?? new List<IObserver>(0);
+
+        _table = Construct();
     }
 
     public void Init(List<(int, IGlider)> gliders)
@@ -111,10 +118,10 @@ public class Scene
         return (s1 << 2) + (s2 << 1) + s3;
     }
 
-    public static int[] Construct()
+    public int[] Construct()
     {
         var len = 1<<3;
-        var rule = 110;
+        var rule = _ruleNumber;
         var t = new int[len];
         for (int i = 0; i < len; i++)
         {

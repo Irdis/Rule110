@@ -8,11 +8,10 @@ public class ClassicPattern : Rule110TestBase
     [TestCase(1, "small", 10)]
     [TestCase(1, "normal", 100)]
     [TestCase(1, "big", 1000)]
-    public void GenerateClassicPattern(int prefNum, string prefSuff, int size)
+    public void GenerateClassicPattern(int prefNum, string prefStr, int size)
     {
-        var actualImgName = GetImgActualPath(prefNum, prefSuff);
-        var baselineImgName = GetImgBaselinePath(prefNum, prefSuff);
-        SetupFolders(actualImgName, baselineImgName);
+        var actualImgName = GetImgActualPath(prefNum, prefStr);
+        var baselineImgName = GetImgBaselinePath(prefNum, prefStr);
 
         var background = new EmptyBackground();
         var observers = new List<IObserver>
