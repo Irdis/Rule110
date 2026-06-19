@@ -24,7 +24,7 @@ public class Rule110TestBase
         string suffStr = null
     ) => $"{GetSuffix(prefNum, prefStr)}{(suffStr == null ? null : "_" + suffStr)}.bmp";
 
-    protected string FormatNumber(int number) => number.ToString("D2");
+    protected string FormatNumber(int number, int? n = null) => number.ToString(n == null ? "D2" : "D" + n);
 
     protected string GetImgBaselinePath(int prefNum,
         string prefStr,
