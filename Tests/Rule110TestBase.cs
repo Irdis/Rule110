@@ -4,13 +4,17 @@ namespace Rule110.Tests;
 
 public class Rule110TestBase
 {
-    [SetUp]
-    public void Setup()
-    {
-        SetupFolders();
+    public bool IsRecording 
+    { 
+        get => Rule110TestConfigProvider.Instance.Mode == TestMode.Recording;
     }
 
-    protected string GetSuffix(int prefNum,
+    public bool WriteToGallery 
+    { 
+        get => Rule110TestConfigProvider.Instance.WriteToGallery;
+    }
+
+    protected string GetPrefix(int prefNum,
         string prefStr
     ) => $"{FormatNumber(prefNum)}_{prefStr}";
 
@@ -22,9 +26,14 @@ public class Rule110TestBase
     protected string GetImageName(int prefNum,
         string prefStr,
         string suffStr = null
-    ) => $"{GetSuffix(prefNum, prefStr)}{(suffStr == null ? null : "_" + suffStr)}.bmp";
+    ) => $"{GetPrefix(prefNum, prefStr)}{(suffStr == null ? null : "_" + suffStr)}.bmp";
 
     protected string FormatNumber(int number, int? n = null) => number.ToString(n == null ? "D2" : "D" + n);
+
+    protected string GetImgGalleryPath(int prefNum,
+        string prefStr,
+        string suffStr = null
+    ) => GetImagePath(OutputType.Gallery, GetImageName(prefNum, prefStr, suffStr));
 
     protected string GetImgBaselinePath(int prefNum,
         string prefStr,
@@ -39,6 +48,8 @@ public class Rule110TestBase
     protected string GetImgActualFolder() => GetImageFolder(OutputType.Actual);
 
     protected string GetImgBaselineFolder() => GetImageFolder(OutputType.Baseline);
+
+    protected string GetImgGalleryFolder() => GetImageFolder(OutputType.Gallery);
 
     protected string GetImageFolder(OutputType type) => 
         Path.Combine("Tests", type.ToString(), GetTagName());
@@ -109,19 +120,36 @@ public class Rule110TestBase
         "expectedFile: " + expectedPath + Environment.NewLine +
         "actualFile: " + actualPath;
 
-    protected void SetupActualFolders() => 
-        SetupFolders(actual: true, baseline: false);
-
-    protected void SetupBaselineFolders() => 
-        SetupFolders(actual: false, baseline: true);
-
-    protected void SetupFolders(bool actual = true, bool baseline = true) 
+    protected void SetupFolders(int prefNum,
+        string prefStr) 
     {
-        if (baseline)
-            Directory.CreateDirectory(GetImgBaselineFolder());
+        var baselineFolder = GetImgBaselineFolder();
+        var actualFolder = GetImgActualFolder();
 
-        if (actual)
-            Directory.CreateDirectory(GetImgActualFolder());
+        Directory.CreateDirectory(baselineFolder);
+        Directory.CreateDirectory(actualFolder);
+
+        var filePrefix = GetPrefix(prefNum, prefStr);
+        if (IsRecording)
+        {
+            CleanupFilesWithPrefix(filePrefix, baselineFolder);
+        }
+
+        if (WriteToGallery)
+        {
+            var galleryFolder = GetImgGalleryFolder();
+            Directory.CreateDirectory(galleryFolder);
+            CleanupFilesWithPrefix(filePrefix, galleryFolder);
+        }
+    }
+
+    private void CleanupFilesWithPrefix(string prefix, string folder)
+    {
+        foreach (var fileToDelete in Directory.EnumerateFiles(folder)
+            .Where(f => Path.GetFileName(f).StartsWith(prefix)))
+        {
+            File.Delete(fileToDelete);
+        }
     }
 
     private string GetTagName()

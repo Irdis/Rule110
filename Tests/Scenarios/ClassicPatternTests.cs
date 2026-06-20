@@ -10,6 +10,8 @@ public class ClassicPattern : Rule110TestBase
     [TestCase(1, "big", 1000)]
     public void GenerateClassicPattern(int prefNum, string prefStr, int size)
     {
+        SetupFolders(prefNum,  prefStr);
+
         var actualImgName = GetImgActualPath(prefNum, prefStr);
         var baselineImgName = GetImgBaselinePath(prefNum, prefStr);
 

@@ -11,5 +11,7 @@ public class Rule110TestConfig
     }
 
     public string Recording { get; set; }
+
+    public bool WriteToGallery { get; set; }
 }
 

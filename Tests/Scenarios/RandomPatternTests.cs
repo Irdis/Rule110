@@ -5,15 +5,17 @@ namespace Rule110.Tests.Scenarios;
 [Tag("random")]
 public class RandomPatternTests : Rule110TestBase
 {
-    [TestCase(1, "all", 300)]
+    [TestCase(1, "neighbors", 300)]
     public void GenerateAllNumbers(int prefNum, string prefStr, int size)
     {
+        SetupFolders(prefNum, prefStr);
+
         var random = new Random();
         for (int i = 0; i < 256; i++)
         {
             var background = new EmptyBackground();
             var actualImgName = GetImgActualPath(prefNum, prefStr, FormatNumber(i, 3));
-            var baselineImgName = GetImgBaselinePath(prefNum, prefStr, FormatNumber(i, 3));
+            var galleryImgName = GetImgGalleryPath(prefNum, prefStr, FormatNumber(i, 3));
 
             var observers = new List<IObserver>
             {
@@ -38,7 +40,11 @@ public class RandomPatternTests : Rule110TestBase
             scene.Complete();
 
             Assert.True(File.Exists(actualImgName));
-            // File.Copy(actualImgName, baselineImgName, overwrite: true);
+
+            if (WriteToGallery)
+            {
+                File.Copy(actualImgName, galleryImgName, overwrite: true);
+            }
         }
     }
 }
