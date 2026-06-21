@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
-[Tag("random")]
+[Tag("RandomPattern")]
 public class RandomPatternTests : Rule110TestBase
 {
     [TestCase(1, "neighbors", 300)]
