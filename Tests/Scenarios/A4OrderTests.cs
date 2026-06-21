@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
-[Tag("a4order")]
+[Tag("A4Order")]
 public class A4OrderTests : Rule110TestBase
 {
     [TestCase(1, "double")]

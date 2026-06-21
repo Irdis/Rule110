@@ -3,26 +3,27 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
-[Tag("EHToE1RelOrde")]
-public class EHToE1RelOrderTest : Rule110TestBase
+[Tag("E1ToE4RelOrder")]
+public class E1ToE4RelOrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]
-    public void GenerateEHRelOrder(int prefNum, string prefStr)
+    public void GenerateE1ToE4RelOrder(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
         var e1GliderType = 0;
-        var ehGliderCollection = new EHatGliderCollection();
+        var e4GliderType = 3;
         var e1GliderCollection = new ENGliderCollection(e1GliderType);
+        var e4GliderCollection = new ENGliderCollection(e4GliderType);
         var c2GliderCollection = new C2GliderCollection();
 
-        var ehStartTile = 10;
+        var enStartTile = 5;
         var controlTile = 15;
 
         var baselineLst = new List<string>();
         var actualLst = new List<string>();
 
-        for (int i = 0; i < EHatGlider.Size; i++)
+        for (int i = 0; i < ENGlider.Size; i++)
         {
             const int width = 300;
             const int height = 300;
@@ -41,20 +42,20 @@ public class EHToE1RelOrderTest : Rule110TestBase
 
             var scene = new Scene(width, background, observers);
             var gliders = new List<(int, IGlider)>();
-            var offset = ehStartTile;
+            var offset = enStartTile;
             var alignment = 0;
             var initialGlider = i;
 
-            var alignDelta = EHatGlider.RightAlignment(initialGlider);
-            gliders.Add((offset, ehGliderCollection.Get(initialGlider)));
+            var alignDelta = ENGlider.RightAlignment(initialGlider, e1GliderType);
+            gliders.Add((offset, e1GliderCollection.Get(initialGlider)));
             offset += alignDelta;
             alignment += alignDelta;
 
-            var (e1Offset, e1Number) = EHatToE1GliderRelativeOrder.Next(initialGlider);
-            offset += e1Offset;
+            var (e4Offset, e4Number) = E1ToE4GliderRelativeOrder.Next(initialGlider);
+            offset += e4Offset;
 
-            alignDelta = ENGlider.RightAlignment(e1Number, e1GliderType);
-            gliders.Add((offset, e1GliderCollection.Get(e1Number)));
+            alignDelta = ENGlider.RightAlignment(e4Number, e4GliderType);
+            gliders.Add((offset, e4GliderCollection.Get(e4Number)));
             offset += alignDelta;
             alignment += alignDelta;
 

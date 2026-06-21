@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
-[Tag("c2order")]
+[Tag("C2Order")]
 public class C2OrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]

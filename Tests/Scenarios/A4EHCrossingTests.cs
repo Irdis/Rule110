@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
-[Tag("a4ehcrossing")]
+[Tag("A4EHCrossing")]
 public class A4EHCrossingTests : Rule110TestBase
 {
     [TestCase(1, "default")]

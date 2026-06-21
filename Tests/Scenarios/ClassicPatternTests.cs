@@ -2,8 +2,8 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
-[Tag("classic")]
-public class ClassicPattern : Rule110TestBase
+[Tag("ClassicPattern")]
+public class ClassicPatternTests : Rule110TestBase
 {
     [TestCase(1, "small", 10)]
     [TestCase(1, "normal", 100)]

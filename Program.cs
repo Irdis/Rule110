@@ -20,8 +20,6 @@ public class Program
         // EncoderJBlock();
         // EncoderKBlock();
         // EncoderLBlock();
-        // E1ToE4RelOrderTest();
-        // E4ToEHRelOrderTest();
         // E5ToE2RelOrderTest();
         // E2ToE4KRelOrderTest();
         // E2ToE4LRelOrderTest();
@@ -655,60 +653,6 @@ public class Program
         }
     }
 
-    public static void E4ToEHRelOrderTest()
-    {
-        var e4GliderType = 3;
-        var e4GliderCollection = new ENGliderCollection(e4GliderType);
-        var ehGliderCollection = new EHatGliderCollection();
-        var c2GliderCollection = new C2GliderCollection();
-
-        for (int k = 0; k < 2 * ENGlider.Size; k++)
-        {
-            const int width = 500;
-            const int height = 500;
-
-            var background = new EtherBackground();
-            var imgName = $"img_{k}.bmp";
-            var observers = new List<IObserver>
-            {
-                new ImgObserver(width, height, imgName),
-            };
-
-            var scene = new Scene(width, background, observers);
-            var gliders = new List<(int, IGlider)>();
-            var offset = 5;
-            var alignment = 0;
-            var initialGlider = k / 2;
-
-            var alignDelta = ENGlider.RightAlignment(initialGlider, e4GliderType);
-            gliders.Add((offset, e4GliderCollection.Get(initialGlider)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            var (ehOffset, ehNumber) = E4ToEHGliderRelativeOrder.Next(initialGlider, k % 2);
-            offset += ehOffset;
-
-            alignDelta = EHatGlider.RightAlignment(ehNumber);
-            gliders.Add((offset, ehGliderCollection.Get(ehNumber)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            offset = 30 + alignment;
-
-            gliders.Add((offset, c2GliderCollection.Get(0)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            scene.Init(gliders);
-            scene.InitComplete();
-            for (int j = 1; j < height; j++)
-            {
-                scene.Next();
-            }
-            scene.Complete();
-        }
-    }
-
     public static void E4ToEHLRelOrderTest()
     {
         var e4GliderType = 3;
@@ -744,61 +688,6 @@ public class Program
 
             alignDelta = EHatGlider.RightAlignment(ehNumber);
             gliders.Add((offset, ehGliderCollection.Get(ehNumber)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            offset = 30 + alignment;
-
-            gliders.Add((offset, c2GliderCollection.Get(0)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            scene.Init(gliders);
-            scene.InitComplete();
-            for (int j = 1; j < height; j++)
-            {
-                scene.Next();
-            }
-            scene.Complete();
-        }
-    }
-
-    public static void E1ToE4RelOrderTest()
-    {
-        var e1GliderType = 0;
-        var e4GliderType = 3;
-        var e1GliderCollection = new ENGliderCollection(e1GliderType);
-        var e4GliderCollection = new ENGliderCollection(e4GliderType);
-        var c2GliderCollection = new C2GliderCollection();
-
-        for (int i = 0; i < ENGlider.Size; i++)
-        {
-            const int width = 500;
-            const int height = 500;
-
-            var background = new EtherBackground();
-            var imgName = $"img_{i}.bmp";
-            var observers = new List<IObserver>
-            {
-                new ImgObserver(width, height, imgName),
-            };
-
-            var scene = new Scene(width, background, observers);
-            var gliders = new List<(int, IGlider)>();
-            var offset = 5;
-            var alignment = 0;
-            var initialGlider = i;
-
-            var alignDelta = ENGlider.RightAlignment(initialGlider, e1GliderType);
-            gliders.Add((offset, e1GliderCollection.Get(initialGlider)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            var (e4Offset, e4Number) = E1ToE4GliderRelativeOrder.Next(initialGlider);
-            offset += e4Offset;
-
-            alignDelta = ENGlider.RightAlignment(e4Number, e4GliderType);
-            gliders.Add((offset, e4GliderCollection.Get(e4Number)));
             offset += alignDelta;
             alignment += alignDelta;
 

@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
-[Tag("enorder")]
+[Tag("ENOrder")]
 public class ENOrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]
