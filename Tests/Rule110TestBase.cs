@@ -25,24 +25,46 @@ public class Rule110TestBase
 
     protected string GetImageName(int prefNum,
         string prefStr,
-        string suffStr = null
-    ) => $"{GetPrefix(prefNum, prefStr)}{(suffStr == null ? null : "_" + suffStr)}.bmp";
+        string suffStr = null,
+        string ext = null
+    ) => $"{GetPrefix(prefNum, prefStr)}{(suffStr == null ? null : "_" + suffStr)}.{(ext == null ? "bmp" : ext)}";
 
     protected string FormatNumber(int number, int? n = null) => number.ToString(n == null ? "D2" : "D" + n);
 
     protected string GetImgGalleryPath(int prefNum,
         string prefStr,
-        string suffStr = null
+        string suffStr = null,
+        string ext = null
     ) => GetImagePath(OutputType.Gallery, GetImageName(prefNum, prefStr, suffStr));
 
     protected string GetImgBaselinePath(int prefNum,
         string prefStr,
-        string suffStr = null
+        string suffStr = null,
+        string ext = null
     ) => GetImagePath(OutputType.Baseline, GetImageName(prefNum, prefStr, suffStr));
+
+    protected List<string> GetBaselineXByYImgNames(int prefNum,
+        string prefStr,
+        int x, int y)
+    {
+        var result = new List<string>(x * y);
+        for (int i = 0; i < x; i++)
+        {
+            for (int j = 0; j < y; j++)
+            {
+                var baselineImg = GetImgBaselinePath(prefNum,
+                    prefStr, 
+                    suffStr: $"{i}x{j}");
+                result.Add(baselineImg);
+            }
+        }
+        return result;
+    }
 
     protected string GetImgActualPath(int prefNum,
         string prefStr,
-        string suffStr = null
+        string suffStr = null,
+        string ext = null
     ) => GetImagePath(OutputType.Actual, GetImageName(prefNum, prefStr, suffStr));
 
     protected string GetImgActualFolder() => GetImageFolder(OutputType.Actual);
@@ -135,7 +157,7 @@ public class Rule110TestBase
             CleanupFilesWithPrefix(filePrefix, baselineFolder);
         }
 
-        if (WriteToGallery)
+        if (WriteToGallery && HasGalleryAttribute())
         {
             var galleryFolder = GetImgGalleryFolder();
             Directory.CreateDirectory(galleryFolder);
@@ -150,6 +172,15 @@ public class Rule110TestBase
         {
             File.Delete(fileToDelete);
         }
+    }
+
+    private bool HasGalleryAttribute()
+    {
+        var fixtureType = TestContext.CurrentContext.Test.Type;
+
+        return (GalleryAttribute)fixtureType
+            .GetCustomAttributes(typeof(GalleryAttribute), true)
+            .FirstOrDefault() != null;
     }
 
     private string GetTagName()

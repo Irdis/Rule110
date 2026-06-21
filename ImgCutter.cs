@@ -54,7 +54,7 @@ public class ImgCutter
     //                               |           | | height
     //                               |           | v
     //                               -------------
-    public void CutImages(
+    public List<string> CutImages(
         string pathTemplate,
         int width,
         int height,
@@ -65,6 +65,8 @@ public class ImgCutter
         bool pad = false
     )
     {
+        var result = new List<string>();
+
         using var fs = File.OpenRead(_scenePath);
         using var br = new BinaryReader(fs);
 
@@ -110,7 +112,8 @@ public class ImgCutter
                 rowInd,
                 width,
                 pad ? width : lastCroppedWidth,
-                imgHeight);
+                imgHeight,
+                result);
 
             for (int i = 0; i < (lastRow ? lastCroppedHeight : height); i++)
             {
@@ -166,6 +169,7 @@ public class ImgCutter
                 imgs[colInd].Save();
             }
         }
+        return result;
     }
 
     private void WriteCurrentBuf(ImgBmp img,
@@ -227,11 +231,13 @@ public class ImgCutter
         int row,
         int width,
         int lastWidth,
-        int height)
+        int height,
+        List<string> imgNames)
     {
         for (int i = 0; i < imgs.Length; i++)
         {
             var fileName = string.Format(pathTemplate, $"{row}x{i}");
+            imgNames.Add(fileName);
             var curWidth = i != imgs.Length - 1
                 ? width
                 : lastWidth;

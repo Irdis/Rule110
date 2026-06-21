@@ -10,7 +10,6 @@ public class Program
         CleanUp();
 
         // Classic();
-        // EncoderSmall();
         EncoderBig();
 
         CutR110Images();
@@ -70,46 +69,6 @@ public class Program
             {
                 // new ImgObserver(width, height, imgName),
                 new FileObserver(width, height, r110Name),
-            };
-
-            var scene = new Scene(width, background, observers);
-            var gliders = new List<(int, IGlider)>();
-            var blocks = BlockEncoder.Parse(pattern);
-            encoder.Encode(blocks, gliders);
-
-            scene.Init(gliders);
-
-            scene.InitComplete();
-
-            for (int j = 1; j < height; j++)
-            {
-                scene.Next();
-            }
-            scene.Complete();
-        }
-    }
-
-    public static void EncoderSmall()
-    {
-        string[] patterns = [
-            "BCFGG",
-            "BCDFFFF",
-        ];
-        var encoderFactory = new BlockEncoderFactory();
-
-        for (int i = 0; i < patterns.Length; i++)
-        {
-            var pattern = patterns[i];
-            var encoder = encoderFactory.Create(i);
-
-            const int width = 1500;
-            const int height = 1000;
-
-            var background = new EtherBackground();
-            var imgName = $"img_{i}.bmp";
-            var observers = new List<IObserver>
-            {
-                new ImgObserver(width, height, imgName),
             };
 
             var scene = new Scene(width, background, observers);

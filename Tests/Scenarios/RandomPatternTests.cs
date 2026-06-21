@@ -2,6 +2,7 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
+[Gallery]
 [Tag("RandomPattern")]
 public class RandomPatternTests : Rule110TestBase
 {
