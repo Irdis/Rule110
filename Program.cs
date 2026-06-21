@@ -427,60 +427,6 @@ public class Program
         }
     }
 
-    public static void EHToE5RelOrderTest()
-    {
-        var e5GliderType = 4;
-        var ehGliderCollection = new EHatGliderCollection();
-        var e5GliderCollection = new ENGliderCollection(e5GliderType);
-        var c2GliderCollection = new C2GliderCollection();
-
-        for (int i = 0; i < EHatGlider.Size; i++)
-        {
-            const int width = 500;
-            const int height = 500;
-
-            var background = new EtherBackground();
-            var imgName = $"img_{i}.bmp";
-            var observers = new List<IObserver>
-            {
-                new ImgObserver(width, height, imgName),
-            };
-
-            var scene = new Scene(width, background, observers);
-            var gliders = new List<(int, IGlider)>();
-            var offset = 5;
-            var alignment = 0;
-            var initialGlider = i;
-
-            var alignDelta = EHatGlider.RightAlignment(initialGlider);
-            gliders.Add((offset, ehGliderCollection.Get(initialGlider)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            var (e5Offset, e5Number) = EHatToE5GliderRelativeOrder.Next(initialGlider);
-            offset += e5Offset;
-
-            alignDelta = ENGlider.RightAlignment(e5Number, e5GliderType);
-            gliders.Add((offset, e5GliderCollection.Get(e5Number)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            offset = 30 + alignment;
-
-            gliders.Add((offset, c2GliderCollection.Get(0)));
-            offset += alignDelta;
-            alignment += alignDelta;
-
-            scene.Init(gliders);
-            scene.InitComplete();
-            for (int j = 1; j < height; j++)
-            {
-                scene.Next();
-            }
-            scene.Complete();
-        }
-    }
-
     private static void Classic()
     {
         const int size = 100;

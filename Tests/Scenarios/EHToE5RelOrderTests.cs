@@ -7,7 +7,7 @@ namespace Rule110.Tests.Scenarios;
 public class EHToE5RelOrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]
-    public void GenerateEHToE5RelOrderTest(int prefNum, string prefStr)
+    public void GenerateEHToE5RelOrder(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
