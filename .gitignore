@@ -6,3 +6,4 @@ out/
 tags
 TestResult.xml
 !Tests/Baseline/**/*.bmp
+!Tests/Gallery/**/*.bmp
