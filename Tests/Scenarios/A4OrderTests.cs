@@ -7,7 +7,7 @@ namespace Rule110.Tests.Scenarios;
 public class A4OrderTests : Rule110TestBase
 {
     [TestCase(1, "double")]
-    public void GenerateA4Order(int prefNum, string prefStr)
+    public void GenerateDoubleA4Order(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
