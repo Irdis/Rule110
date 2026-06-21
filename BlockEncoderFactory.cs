@@ -21,7 +21,7 @@ public class BlockEncoderFactory
         _en5GliderCollection = new ENGliderCollection(4);
     }
 
-    public BlockEncoder Create(object arg)
+    public BlockEncoder Create(object arg = null)
     {
         var encoder = new BlockEncoder(
             _a4GliderCollection,
