@@ -3,51 +3,60 @@ using NUnit.Framework;
 
 namespace Rule110.Tests.Scenarios;
 
-[Tag("c2order")]
-public class C2OrderTests : Rule110TestBase
+[Tag("enorder")]
+public class ENOrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]
-    public void GenerateC2Order(int prefNum, string prefStr)
+    public void GenerateENOrder(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
-        var eh = new EHatGlider();
+        var enGliderType = 4;
+        var en1 = new ENGlider(enGliderType);
         var c2 = new C2Glider();
-        var analyzer = new GliderAnalyzer();
-        var c2Lst = analyzer.Analyze(c2);
-        var startGlider = 5;
 
-        var startTile = 25;
-        var controlTile = 30;
+        var analyzer = new GliderAnalyzer();
+        var enLst = analyzer.Analyze(en1);
+        var enInd = 1;
+
+        var c2StartTile = 15;
+        var enStartTile = 30;
+        var controlTile = 50;
 
         var baselineLst = new List<string>();
         var actualLst = new List<string>();
 
-        for (int i = 0; i < 20; i++)
+        for (int k = 0; k < 40; k++)
         {
-            const int width = 700;
-            const int height = 700;
-
-            var actualImgName = GetImgActualPath(prefNum,
-                prefStr, FormatNumber(i));
-            var baselineImgName = GetImgBaselinePath(prefNum,
-                prefStr, FormatNumber(i));
+            const int width = 1000;
+            const int height = 1000;
 
             var background = new EtherBackground();
+
+            var actualImgName = GetImgActualPath(prefNum,
+                prefStr, FormatNumber(k));
+            var baselineImgName = GetImgBaselinePath(prefNum,
+                prefStr, FormatNumber(k));
+
             var observers = new List<IObserver>
             {
                 new ImgObserver(width, height, actualImgName),
             };
 
             var scene = new Scene(width, background, observers);
-
             var gliders = new List<(int, IGlider)>();
 
-            var (tileOffset, orderPosition) = C2Glider.Next(startGlider, i);
-            gliders.Add((startTile + tileOffset, c2Lst[orderPosition]));
-            gliders.Add((startTile, c2Lst[startGlider]));
+            var (offset1, gliderIndex1) = ENGlider.Next(enInd, k);
+            var align1 = ENGlider.RightAlignment(gliderIndex1, enGliderType);
 
-            gliders.Add((controlTile, eh));
+            var alignTotal = 0;
+
+            gliders.Add((c2StartTile + alignTotal, c2));
+
+            gliders.Add((enStartTile + offset1 + alignTotal, enLst[gliderIndex1]));
+            alignTotal += align1;
+
+            gliders.Add((controlTile + alignTotal, c2));
 
             scene.Init(gliders);
 
