@@ -1,12 +1,12 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Gliders;
 
-[Tag("GliderGun")]
-public class GliderGunTests : Rule110TestBase
+[Tag("HGlider")]
+public class HGliderTests : Rule110TestBase
 {
-    [TestCase(1, "default", 1000)]
+    [TestCase(1, "h_glider", 200)]
     public void GenerateGliderGun(int prefNum, string prefStr, int size)
     {
         SetupFolders(prefNum, prefStr);
@@ -22,7 +22,7 @@ public class GliderGunTests : Rule110TestBase
         var scene = new Scene(size, background, observers);
 
         var gliders = new List<(int, IGlider)>();
-        gliders.Add((35, new GliderGun()));
+        gliders.Add((5, new HGlider()));
         scene.Init(gliders);
         scene.InitComplete();
 
