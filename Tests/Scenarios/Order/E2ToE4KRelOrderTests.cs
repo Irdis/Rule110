@@ -1,21 +1,21 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Order;
 
-[Tag("E5ToE2RelOrder")]
-public class E5ToE2RelOrderTests : Rule110TestBase
+[Tag("E2ToE4KRelOrder")]
+public class E2ToE4KRelOrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]
-    public void GenerateE1ToE4RelOrder(int prefNum, string prefStr)
+    public void GenerateE2ToE4KRelOrder(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
-        var e5GliderType = 4;
         var e2GliderType = 1;
+        var e4GliderType = 3;
 
-        var e5GliderCollection = new ENGliderCollection(e5GliderType);
         var e2GliderCollection = new ENGliderCollection(e2GliderType);
+        var e4GliderCollection = new ENGliderCollection(e4GliderType);
         var c2GliderCollection = new C2GliderCollection();
 
         var startTile = 5;
@@ -47,16 +47,16 @@ public class E5ToE2RelOrderTests : Rule110TestBase
             var alignment = 0;
             var initialGlider = i;
 
-            var alignDelta = ENGlider.RightAlignment(initialGlider, e5GliderType);
-            gliders.Add((offset, e5GliderCollection.Get(initialGlider)));
+            var alignDelta = ENGlider.RightAlignment(initialGlider, e2GliderType);
+            gliders.Add((offset, e2GliderCollection.Get(initialGlider)));
             offset += alignDelta;
             alignment += alignDelta;
 
-            var (e2Offset, e2Number) = E5ToE2GliderRelativeOrder.Next(initialGlider);
-            offset += e2Offset;
+            var (e4Offset, e4Number) = E2ToE4KGliderRelativeOrder.Next(initialGlider);
+            offset += e4Offset;
 
-            alignDelta = ENGlider.RightAlignment(e2Number, e2GliderType);
-            gliders.Add((offset, e2GliderCollection.Get(e2Number)));
+            alignDelta = ENGlider.RightAlignment(e4Number, e4GliderType);
+            gliders.Add((offset, e4GliderCollection.Get(e4Number)));
             offset += alignDelta;
             alignment += alignDelta;
 

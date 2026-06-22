@@ -1,7 +1,7 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Order;
 
 [Tag("A4Order")]
 public class A4OrderTests : Rule110TestBase

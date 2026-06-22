@@ -1,28 +1,28 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Order;
 
-[Tag("EHRelOrder")]
-public class EHRelOrderTests : Rule110TestBase
+[Tag("EHToE1RelOrde")]
+public class EHToE1RelOrderTest : Rule110TestBase
 {
     [TestCase(1, "default")]
     public void GenerateEHRelOrder(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
+        var e1GliderType = 0;
         var ehGliderCollection = new EHatGliderCollection();
+        var e1GliderCollection = new ENGliderCollection(e1GliderType);
         var c2GliderCollection = new C2GliderCollection();
 
-        var initialGlider = 1;
-
-        var a4StartTile = 30;
-        var ehStartTile = 50;
+        var ehStartTile = 10;
+        var controlTile = 15;
 
         var baselineLst = new List<string>();
         var actualLst = new List<string>();
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < EHatGlider.Size; i++)
         {
             const int width = 300;
             const int height = 300;
@@ -41,24 +41,24 @@ public class EHRelOrderTests : Rule110TestBase
 
             var scene = new Scene(width, background, observers);
             var gliders = new List<(int, IGlider)>();
-            var offset = 5;
+            var offset = ehStartTile;
             var alignment = 0;
+            var initialGlider = i;
 
             var alignDelta = EHatGlider.RightAlignment(initialGlider);
             gliders.Add((offset, ehGliderCollection.Get(initialGlider)));
             offset += alignDelta;
             alignment += alignDelta;
 
-            var initialTriangleCount = EHatGliderRelativeOrder.InitialNumberOfTriangles[i % 8];
-            var (ehOffset, ehNumber) = EHatGliderRelativeOrder.Next(initialGlider, i / 8 + initialTriangleCount, i % 8);
-            offset += ehOffset;
+            var (e1Offset, e1Number) = EHatToE1GliderRelativeOrder.Next(initialGlider);
+            offset += e1Offset;
 
-            alignDelta = EHatGlider.RightAlignment(ehNumber);
-            gliders.Add((offset, ehGliderCollection.Get(ehNumber)));
+            alignDelta = ENGlider.RightAlignment(e1Number, e1GliderType);
+            gliders.Add((offset, e1GliderCollection.Get(e1Number)));
             offset += alignDelta;
             alignment += alignDelta;
 
-            offset = 40 + alignment;
+            offset = controlTile + alignment;
 
             gliders.Add((offset, c2GliderCollection.Get(0)));
             offset += alignDelta;

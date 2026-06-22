@@ -1,21 +1,19 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Order;
 
-[Tag("E2ToE4LRelOrder")]
-public class E2ToE4LRelOrderTests : Rule110TestBase
+[Tag("EHToE5RelOrder")]
+public class EHToE5RelOrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]
-    public void GenerateE2ToE4LRelOrder(int prefNum, string prefStr)
+    public void GenerateEHToE5RelOrder(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
-        var e2GliderType = 1;
-        var e4GliderType = 3;
-
-        var e2GliderCollection = new ENGliderCollection(e2GliderType);
-        var e4GliderCollection = new ENGliderCollection(e4GliderType);
+        var e5GliderType = 4;
+        var ehGliderCollection = new EHatGliderCollection();
+        var e5GliderCollection = new ENGliderCollection(e5GliderType);
         var c2GliderCollection = new C2GliderCollection();
 
         var startTile = 5;
@@ -47,16 +45,16 @@ public class E2ToE4LRelOrderTests : Rule110TestBase
             var alignment = 0;
             var initialGlider = i;
 
-            var alignDelta = ENGlider.RightAlignment(initialGlider, e2GliderType);
-            gliders.Add((offset, e2GliderCollection.Get(initialGlider)));
+            var alignDelta = EHatGlider.RightAlignment(initialGlider);
+            gliders.Add((offset, ehGliderCollection.Get(initialGlider)));
             offset += alignDelta;
             alignment += alignDelta;
 
-            var (e4Offset, e4Number) = E2ToE4LGliderRelativeOrder.Next(initialGlider);
-            offset += e4Offset;
+            var (e5Offset, e5Number) = EHatToE5GliderRelativeOrder.Next(initialGlider);
+            offset += e5Offset;
 
-            alignDelta = ENGlider.RightAlignment(e4Number, e4GliderType);
-            gliders.Add((offset, e4GliderCollection.Get(e4Number)));
+            alignDelta = ENGlider.RightAlignment(e5Number, e5GliderType);
+            gliders.Add((offset, e5GliderCollection.Get(e5Number)));
             offset += alignDelta;
             alignment += alignDelta;
 

@@ -1,37 +1,42 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Order;
 
-[Tag("EncoderFBlock")]
-public class EncoderFBlockTests : Rule110TestBase
+[Tag("ENOrder")]
+public class ENOrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]
-    public void GenerateEncoderFBlock(int prefNum, string prefStr)
+    public void GenerateENOrder(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
-        var encoderFactory = new BlockEncoderFactory();
+        var enGliderType = 4;
+        var en1 = new ENGlider(enGliderType);
+        var c2 = new C2Glider();
 
-        var startTile = 5;
-        var controlTile = 30;
+        var analyzer = new GliderAnalyzer();
+        var enLst = analyzer.Analyze(en1);
+        var enInd = 1;
+
+        var c2StartTile = 15;
+        var enStartTile = 30;
+        var controlTile = 50;
 
         var baselineLst = new List<string>();
         var actualLst = new List<string>();
 
-        for (int i = 0; i < EHatGlider.Size; i++)
+        for (int k = 0; k < 40; k++)
         {
-            var encoder = encoderFactory.Create(i);
-
-            const int width = 1500;
+            const int width = 1000;
             const int height = 1000;
 
             var background = new EtherBackground();
 
             var actualImgName = GetImgActualPath(prefNum,
-                prefStr, FormatNumber(i));
+                prefStr, FormatNumber(k));
             var baselineImgName = GetImgBaselinePath(prefNum,
-                prefStr, FormatNumber(i));
+                prefStr, FormatNumber(k));
 
             var observers = new List<IObserver>
             {
@@ -40,11 +45,18 @@ public class EncoderFBlockTests : Rule110TestBase
 
             var scene = new Scene(width, background, observers);
             var gliders = new List<(int, IGlider)>();
-            encoder.InsertEHat(gliders, i, startTile);
-            encoder.EncodeF(gliders);
-            encoder.EncodeF(gliders);
-            encoder.EncodeF(gliders);
-            encoder.EncodeF(gliders);
+
+            var (offset1, gliderIndex1) = ENGlider.Next(enInd, k);
+            var align1 = ENGlider.RightAlignment(gliderIndex1, enGliderType);
+
+            var alignTotal = 0;
+
+            gliders.Add((c2StartTile + alignTotal, c2));
+
+            gliders.Add((enStartTile + offset1 + alignTotal, enLst[gliderIndex1]));
+            alignTotal += align1;
+
+            gliders.Add((controlTile + alignTotal, c2));
 
             scene.Init(gliders);
 

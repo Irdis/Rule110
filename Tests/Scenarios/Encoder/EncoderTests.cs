@@ -1,7 +1,7 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Encoder;
 
 [Tag("Encoder")]
 public class EncoderTests : Rule110TestBase

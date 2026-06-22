@@ -1,13 +1,13 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Encoder;
 
-[Tag("EncoderKBlock")]
-public class EncoderKBlockTests : Rule110TestBase
+[Tag("EncoderHBlock")]
+public class EncoderHBlockTests : Rule110TestBase
 {
     [TestCase(1, "default")]
-    public void GenerateEncoderKBlock(int prefNum, string prefStr)
+    public void GenerateEncoderHBlock(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
@@ -41,8 +41,8 @@ public class EncoderKBlockTests : Rule110TestBase
             var scene = new Scene(width, background, observers);
             var gliders = new List<(int, IGlider)>();
             encoder.InsertEHat(gliders, i, startTile);
-            encoder.EncodeK(gliders);
-            encoder.EncodeK(gliders);
+            encoder.EncodeH(gliders);
+            encoder.EncodeH(gliders);
 
             scene.Init(gliders);
 

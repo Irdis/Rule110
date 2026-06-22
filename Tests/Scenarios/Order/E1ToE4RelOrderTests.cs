@@ -1,7 +1,7 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Order;
 
 [Tag("E1ToE4RelOrder")]
 public class E1ToE4RelOrderTests : Rule110TestBase

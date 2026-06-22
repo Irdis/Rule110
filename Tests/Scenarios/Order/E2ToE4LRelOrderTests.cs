@@ -1,19 +1,21 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Order;
 
-[Tag("E4ToEHLRelOrder")]
-public class E4ToEHLRelOrderTests : Rule110TestBase
+[Tag("E2ToE4LRelOrder")]
+public class E2ToE4LRelOrderTests : Rule110TestBase
 {
     [TestCase(1, "default")]
-    public void GenerateE4ToEHLRelOrder(int prefNum, string prefStr)
+    public void GenerateE2ToE4LRelOrder(int prefNum, string prefStr)
     {
         SetupFolders(prefNum,  prefStr);
 
+        var e2GliderType = 1;
         var e4GliderType = 3;
+
+        var e2GliderCollection = new ENGliderCollection(e2GliderType);
         var e4GliderCollection = new ENGliderCollection(e4GliderType);
-        var ehGliderCollection = new EHatGliderCollection();
         var c2GliderCollection = new C2GliderCollection();
 
         var startTile = 5;
@@ -22,7 +24,7 @@ public class E4ToEHLRelOrderTests : Rule110TestBase
         var baselineLst = new List<string>();
         var actualLst = new List<string>();
 
-        for (int k = 0; k < 2 * ENGlider.Size; k++)
+        for (int i = 0; i < ENGlider.Size; i++)
         {
             const int width = 500;
             const int height = 500;
@@ -30,9 +32,9 @@ public class E4ToEHLRelOrderTests : Rule110TestBase
             var background = new EtherBackground();
 
             var actualImgName = GetImgActualPath(prefNum,
-                prefStr, FormatNumber(k));
+                prefStr, FormatNumber(i));
             var baselineImgName = GetImgBaselinePath(prefNum,
-                prefStr, FormatNumber(k));
+                prefStr, FormatNumber(i));
 
             var observers = new List<IObserver>
             {
@@ -43,18 +45,18 @@ public class E4ToEHLRelOrderTests : Rule110TestBase
             var gliders = new List<(int, IGlider)>();
             var offset = startTile;
             var alignment = 0;
-            var initialGlider = k / 2;
+            var initialGlider = i;
 
-            var alignDelta = ENGlider.RightAlignment(initialGlider, e4GliderType);
-            gliders.Add((offset, e4GliderCollection.Get(initialGlider)));
+            var alignDelta = ENGlider.RightAlignment(initialGlider, e2GliderType);
+            gliders.Add((offset, e2GliderCollection.Get(initialGlider)));
             offset += alignDelta;
             alignment += alignDelta;
 
-            var (ehOffset, ehNumber) = E4ToEHLGliderRelativeOrder.Next(initialGlider, k % 2);
-            offset += ehOffset;
+            var (e4Offset, e4Number) = E2ToE4LGliderRelativeOrder.Next(initialGlider);
+            offset += e4Offset;
 
-            alignDelta = EHatGlider.RightAlignment(ehNumber);
-            gliders.Add((offset, ehGliderCollection.Get(ehNumber)));
+            alignDelta = ENGlider.RightAlignment(e4Number, e4GliderType);
+            gliders.Add((offset, e4GliderCollection.Get(e4Number)));
             offset += alignDelta;
             alignment += alignDelta;
 

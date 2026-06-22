@@ -1,7 +1,7 @@
 using Rule110.Gliders;
 using NUnit.Framework;
 
-namespace Rule110.Tests.Scenarios;
+namespace Rule110.Tests.Scenarios.Order;
 
 [Tag("A4EHCrossing")]
 public class A4EHCrossingTests : Rule110TestBase
